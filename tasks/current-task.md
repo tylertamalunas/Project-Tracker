@@ -1,16 +1,15 @@
 # Current Task
-Add indexes and uniqueness constraints for core lookup paths
+Create seed data for categories, merchants, and sample catalog entries
 
 ## Summary
-Improve correctness and queryability of the schema.
+Provide realistic data to exercise the UI and summaries during development.
 
 ## Acceptance Criteria
-- Add unique constraints where needed, such as category names and optional merchant names if appropriate.
-- Add indexes for common joins and filter fields:
-  - project_id
-  - material_id
-  - tool_id
-  - merchant_id
-  - status
-  - created_at
-- Document rationale for each index.
+- Seed script inserts at least:
+  - a few material categories
+  - a few tool categories
+  - a few merchants
+  - sample materials
+  - sample tools
+- Seed script is repeatable or safely resettable.
+- README explains how to load seed data.

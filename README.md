@@ -53,6 +53,13 @@ Python-Project-Tracker/
 
 SQLite database (`tracker.db`) is created automatically on first run. No manual setup required.
 
+### Load Seed Data
+
+```bash
+python seed.py          # Insert sample categories, merchants, materials, and tools
+python seed.py --reset  # Clear catalog data and re-seed from scratch
+```
+
 ## Features (MVP)
 
 - Create, edit, and delete projects
