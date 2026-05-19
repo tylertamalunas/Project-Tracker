@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Projects — Project Tracker{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Projects</h1>
+    <a href="/projects/new" class="btn btn-primary">+ New Project</a>
+</div>
+
+<!-- Status filter -->
+<div class="mb-3">
+    <span class="me-2">Filter:</span>
+    <a href="/projects" class="btn btn-sm {% if current_filter == 'all' %}btn-dark{% else %}btn-outline-secondary{% endif %}">All</a>
+    <a href="/projects?status=planned" class="btn btn-sm {% if current_filter == 'planned' %}btn-dark{% else %}btn-outline-secondary{% endif %}">Planned</a>
+    <a href="/projects?status=active" class="btn btn-sm {% if current_filter == 'active' %}btn-dark{% else %}btn-outline-secondary{% endif %}">Active</a>
+    <a href="/projects?status=completed" class="btn btn-sm {% if current_filter == 'completed' %}btn-dark{% else %}btn-outline-secondary{% endif %}">Completed</a>
+</div>
+
+{% if projects %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th class="text-end">Estimated Total</th>
+            <th class="text-end">Actual Total</th>
+            <th class="text-end">Variance</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for project in projects %}
+        <tr>
+            <td>{{ project.name }}</td>
+            <td>
+                {% if project.status == 'completed' %}
+                    <span class="badge bg-success">Completed</span>
+                {% elif project.status == 'active' %}
+                    <span class="badge bg-primary">Active</span>
+                {% else %}
+                    <span class="badge bg-secondary">Planned</span>
+                {% endif %}
+            </td>
+            <td>{{ project.created_at.strftime('%Y-%m-%d') if project.created_at else '' }}</td>
+            <td class="text-end">${{ "%.2f"|format(project.estimated_total) }}</td>
+            <td class="text-end">${{ "%.2f"|format(project.actual_total) }}</td>
+            <td class="text-end">
+                {% set v = project.variance %}
+                {% if v > 0 %}
+                    <span class="text-danger">+${{ "%.2f"|format(v) }}</span>
+                {% elif v < 0 %}
+                    <span class="text-success">-${{ "%.2f"|format(v|abs) }}</span>
+                {% else %}
+                    $0.00
+                {% endif %}
+            </td>
+            <td>
+                <a href="/projects/{{ project.id }}" class="btn btn-sm btn-outline-primary">View</a>
+                {% if project.status != 'completed' %}
+                    <a href="/projects/{{ project.id }}/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="alert alert-info">
+    No projects yet. <a href="/projects/new">Create your first project</a>.
+</div>
+{% endif %}
+{% endblock %}

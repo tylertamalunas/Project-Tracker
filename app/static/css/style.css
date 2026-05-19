@@ -1,0 +1,36 @@
+/* Project Tracker - Custom Styles */
+
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: 600;
+}
+
+/* Summary cards */
+.summary-card {
+    border-left: 4px solid #0d6efd;
+    background: #fff;
+}
+
+.summary-card.success {
+    border-left-color: #198754;
+}
+
+.summary-card.warning {
+    border-left-color: #ffc107;
+}
+
+.summary-card.danger {
+    border-left-color: #dc3545;
+}
+
+/* Variance coloring */
+.text-over-budget {
+    color: #dc3545;
+}
+
+.text-under-budget {
+    color: #198754;
+}
