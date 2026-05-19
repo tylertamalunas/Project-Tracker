@@ -44,6 +44,7 @@ Python-Project-Tracker/
 ├── config.py                # App configuration
 ├── run.py                   # Entry point
 ├── requirements.txt         # Python dependencies
+├── Documents/               # Original planning docs
 ├── Instructions/            # Project specs and decisions
 ├── memory/                  # Task logs and decisions
 └── tasks/                   # Current task definition

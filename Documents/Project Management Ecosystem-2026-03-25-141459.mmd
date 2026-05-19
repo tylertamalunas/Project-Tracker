@@ -1,0 +1,155 @@
+erDiagram
+    PROJECTS {
+        int id PK
+        string name
+        text description
+        string status
+        date start_date
+        date end_date
+        decimal budget_estimate
+        text notes
+        datetime created_at
+        datetime updated_at
+    }
+
+    PROJECT_HIERARCHY {
+        int id PK
+        int parent_project_id FK
+        int child_project_id FK
+        datetime created_at
+    }
+
+    PROJECT_RELATIONSHIPS {
+        int id PK
+        int project_id FK
+        int related_project_id FK
+        string relationship_type
+        text note
+        datetime created_at
+    }
+
+    MATERIAL_CATEGORIES {
+        int id PK
+        string name
+        text description
+    }
+
+    TOOL_CATEGORIES {
+        int id PK
+        string name
+        text description
+    }
+
+    MERCHANTS {
+        int id PK
+        string name
+        string website_url
+        text notes
+        datetime created_at
+    }
+
+    MATERIALS {
+        int id PK
+        string name
+        text description
+        int material_category_id FK
+        string unit_of_measure
+        decimal default_price
+        string sku
+        string brand
+        int merchant_id FK
+        text merchant_notes
+        boolean is_active
+        datetime created_at
+        datetime updated_at
+    }
+
+    TOOLS {
+        int id PK
+        string name
+        text description
+        int tool_category_id FK
+        decimal default_price
+        string brand
+        string model_number
+        int merchant_id FK
+        text merchant_notes
+        boolean is_active
+        datetime created_at
+        datetime updated_at
+    }
+
+    PROJECT_MATERIALS {
+        int id PK
+        int project_id FK
+        int material_id FK
+        decimal quantity
+        string unit_of_measure
+        decimal estimated_unit_price
+        decimal actual_unit_price
+        text notes
+        date purchased_on
+        int merchant_id FK
+        datetime created_at
+        datetime updated_at
+    }
+
+    PROJECT_TOOLS {
+        int id PK
+        int project_id FK
+        int tool_id FK
+        int quantity
+        boolean already_owned
+        decimal estimated_unit_price
+        decimal actual_unit_price
+        text notes
+        date purchased_on
+        int merchant_id FK
+        datetime created_at
+        datetime updated_at
+    }
+
+    MEDIA {
+        int id PK
+        int project_id FK
+        string media_type
+        string file_name
+        string original_file_name
+        string file_path
+        string mime_type
+        int file_size_bytes
+        text caption
+        text description
+        datetime uploaded_at
+    }
+
+    MEDIA_LINKS {
+        int id PK
+        int media_id FK
+        int project_material_id FK
+        int project_tool_id FK
+        datetime created_at
+    }
+
+    PROJECTS ||--o{ PROJECT_MATERIALS : contains
+    PROJECTS ||--o{ PROJECT_TOOLS : contains
+    PROJECTS ||--o{ MEDIA : has
+    PROJECTS ||--o{ PROJECT_HIERARCHY : parent_of
+    PROJECTS ||--o{ PROJECT_HIERARCHY : child_of
+    PROJECTS ||--o{ PROJECT_RELATIONSHIPS : source_project
+    PROJECTS ||--o{ PROJECT_RELATIONSHIPS : related_project
+
+    MATERIAL_CATEGORIES ||--o{ MATERIALS : classifies
+    TOOL_CATEGORIES ||--o{ TOOLS : classifies
+
+    MERCHANTS ||--o{ MATERIALS : default_merchant
+    MERCHANTS ||--o{ TOOLS : default_merchant
+    MERCHANTS ||--o{ PROJECT_MATERIALS : purchased_from
+    MERCHANTS ||--o{ PROJECT_TOOLS : purchased_from
+
+    MATERIALS ||--o{ PROJECT_MATERIALS : used_in
+    TOOLS ||--o{ PROJECT_TOOLS : used_in
+
+    MEDIA ||--o{ MEDIA_LINKS : linked_by
+    PROJECT_MATERIALS ||--o{ MEDIA_LINKS : may_reference
+    PROJECT_TOOLS ||--o{ MEDIA_LINKS : may_reference

@@ -1,0 +1,112 @@
+New mermaid diagram for changes:
+`erDiagram
+PROJECTS {
+int id PK
+string name
+string description
+string status
+datetime created_at
+datetime updated_at
+}
+
+MATERIAL_CATEGORIES {
+    int id PK
+    string name
+    string description
+    datetime created_at
+    datetime updated_at
+}
+
+TOOL_CATEGORIES {
+    int id PK
+    string name
+    string description
+    datetime created_at
+    datetime updated_at
+}
+
+MERCHANTS {
+    int id PK
+    string name
+    string website
+    string notes
+    datetime created_at
+    datetime updated_at
+}
+
+MATERIALS {
+    int id PK
+    string name
+    decimal default_price
+    string unit_of_measure
+    int category_id FK
+    int merchant_id FK
+    string notes
+    datetime created_at
+    datetime updated_at
+}
+
+TOOLS {
+    int id PK
+    string name
+    decimal default_price
+    int category_id FK
+    string notes
+    datetime created_at
+    datetime updated_at
+}
+
+PROJECT_MATERIALS {
+    int id PK
+    int project_id FK
+    int material_id FK
+    int quantity "quantity > 0"
+    decimal estimated_unit_price "estimated_unit_price >= 0"
+    decimal actual_unit_price "actual_unit_price IS NULL OR PROJECT_MATERIALS.actual_unit_price >= 0"
+    string notes
+    datetime created_at
+    datetime updated_at
+}
+
+PROJECT_TOOLS {
+    int id PK
+    int project_id FK
+    int tool_id FK
+    int quantity "quantity > 0"
+    boolean already_owned "If PROJECT_TOOLS.already_owned = true, then PROJECT_TOOLS.actual_unit_price = 0"
+    decimal estimated_unit_price "estimated_unit_price >= 0"
+    decimal actual_unit_price "actual_unit_price IS NULL OR PROJECT_TOOLS.actual_unit_price >= 0"
+    string notes
+    datetime created_at
+    datetime updated_at
+}
+
+MEDIA {
+    int id PK
+    int project_id FK
+    string file_path
+    string file_name
+    string media_type
+    string notes
+    datetime created_at
+    datetime updated_at
+}
+
+MATERIAL_CATEGORIES ||--o{ MATERIALS : categorizes
+TOOL_CATEGORIES ||--o{ TOOLS : categorizes
+MERCHANTS ||--o{ MATERIALS : supplies
+
+PROJECTS ||--o{ PROJECT_MATERIALS : contains
+MATERIALS ||--o{ PROJECT_MATERIALS : used_in
+
+PROJECTS ||--o{ PROJECT_TOOLS : contains
+TOOLS ||--o{ PROJECT_TOOLS : used_in
+
+PROJECTS ||--o{ MEDIA : has`
+
+
+
+MATERIALS.default_price and TOOLS.default_price are only the current default price for new entries.
+Historical project prices are preserved in PROJECT_MATERIALS and PROJECT_TOOLS.
+Project totals are computed dynamically from the join tables.
+MEDIA attaches only to PROJECTS in the MVP.
