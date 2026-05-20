@@ -13,6 +13,8 @@ CREATE TABLE IF NOT EXISTS projects (
     status TEXT NOT NULL DEFAULT 'planned' CHECK (status IN ('planned', 'active', 'completed')),
     start_date TEXT,          -- ISO 8601 date, optional/informational
     end_date TEXT,            -- ISO 8601 date, optional/informational
+    budget_estimate REAL CHECK (budget_estimate IS NULL OR budget_estimate >= 0),
+    notes TEXT DEFAULT '',
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 );

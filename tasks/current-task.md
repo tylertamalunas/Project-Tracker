@@ -1,15 +1,17 @@
 # Current Task
-Create seed data for categories, merchants, and sample catalog entries
+Implement Projects repository/service layer
 
 ## Summary
-Provide realistic data to exercise the UI and summaries during development.
+Build create/read/update/delete operations for projects.
 
 ## Acceptance Criteria
-- Seed script inserts at least:
-  - a few material categories
-  - a few tool categories
-  - a few merchants
-  - sample materials
-  - sample tools
-- Seed script is repeatable or safely resettable.
-- README explains how to load seed data.
+- Support fields:
+  - name
+  - description
+  - status
+  - start_date
+  - end_date
+  - budget_estimate
+  - notes
+- Persist created_at and updated_at.
+- Methods exist for list, create, update, get by id, and delete.

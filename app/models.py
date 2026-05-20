@@ -11,6 +11,8 @@ class Project(db.Model):
     status = db.Column(db.String(20), nullable=False, default="planned", index=True)
     start_date = db.Column(db.Date, nullable=True)
     end_date = db.Column(db.Date, nullable=True)
+    budget_estimate = db.Column(db.Numeric(10, 2), nullable=True)
+    notes = db.Column(db.Text, default="")
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), index=True)
     updated_at = db.Column(
         db.DateTime,
