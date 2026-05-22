@@ -94,6 +94,7 @@ class Merchant(db.Model):
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     materials = db.relationship("Material", back_populates="merchant")
+    tools = db.relationship("Tool", back_populates="merchant")
 
 
 class Material(db.Model):
@@ -123,12 +124,17 @@ class Tool(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     default_price = db.Column(db.Numeric(10, 2), default=0)
+    brand = db.Column(db.String(200), default="")
+    model_number = db.Column(db.String(100), default="")
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
     category_id = db.Column(db.Integer, db.ForeignKey("tool_categories.id"), nullable=True, index=True)
+    merchant_id = db.Column(db.Integer, db.ForeignKey("merchants.id"), nullable=True, index=True)
     notes = db.Column(db.Text, default="")
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     category = db.relationship("ToolCategory", back_populates="tools")
+    merchant = db.relationship("Merchant", back_populates="tools")
     project_tools = db.relationship("ProjectTool", back_populates="tool")
 
 

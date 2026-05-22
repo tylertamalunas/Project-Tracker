@@ -73,11 +73,16 @@ CREATE TABLE IF NOT EXISTS tools (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     default_price REAL DEFAULT 0 CHECK (default_price >= 0),
+    brand TEXT DEFAULT '',
+    model_number TEXT DEFAULT '',
+    is_active INTEGER NOT NULL DEFAULT 1 CHECK (is_active IN (0,1)),
     category_id INTEGER,
+    merchant_id INTEGER,
     notes TEXT DEFAULT '',
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at TEXT NOT NULL DEFAULT (datetime('now')),
-    FOREIGN KEY (category_id) REFERENCES tool_categories(id) ON DELETE SET NULL
+    FOREIGN KEY (category_id) REFERENCES tool_categories(id) ON DELETE SET NULL,
+    FOREIGN KEY (merchant_id) REFERENCES merchants(id) ON DELETE SET NULL
 );
 
 -- ============================================================
@@ -180,6 +185,9 @@ CREATE INDEX IF NOT EXISTS ix_materials_merchant_id ON materials(merchant_id);
 
 -- tools.category_id: join tools to their category for catalog views
 CREATE INDEX IF NOT EXISTS ix_tools_category_id ON tools(category_id);
+
+-- tools.merchant_id: join tools to their merchant for catalog views
+CREATE INDEX IF NOT EXISTS ix_tools_merchant_id ON tools(merchant_id);
 
 -- project_materials.project_id: load all materials for a given project
 CREATE INDEX IF NOT EXISTS ix_project_materials_project_id ON project_materials(project_id);

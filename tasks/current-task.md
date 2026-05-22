@@ -1,10 +1,10 @@
 # Current Task
-Implement Materials catalog repository/service layer
+Implement Tools catalog repository/service layer
 
 ## Summary
-Build CRUD operations for global materials.
+Build CRUD operations for global tools.
 
 ## Acceptance Criteria
-- Support fields from schema including category, unit, default price, sku, brand, merchant, notes, and is_active.
+- Support fields from schema including category, default price, brand, model number, merchant, notes, and is_active.
 - List view can filter active/inactive items.
-- Validations protect required fields and sensible default prices
+- Validations protect required fields and sensible default prices.
