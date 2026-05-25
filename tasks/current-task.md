@@ -1,10 +1,10 @@
 # Current Task
-Implement Tools catalog repository/service layer
+Implement Merchants CRUD
 
 ## Summary
-Build CRUD operations for global tools.
+Add merchant management so materials, tools, and purchases can reference a source.
 
 ## Acceptance Criteria
-- Support fields from schema including category, default price, brand, model number, merchant, notes, and is_active.
-- List view can filter active/inactive items.
-- Validations protect required fields and sensible default prices.
+- CRUD exists for merchant name, website URL, and notes.
+- Materials and tools can optionally point to a default merchant.
+- Project purchase records can optionally reference a merchant.

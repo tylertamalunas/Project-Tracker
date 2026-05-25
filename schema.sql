@@ -93,6 +93,7 @@ CREATE TABLE IF NOT EXISTS project_materials (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     project_id INTEGER NOT NULL,
     material_id INTEGER NOT NULL,
+    merchant_id INTEGER,
     quantity INTEGER NOT NULL CHECK (quantity > 0),
     estimated_unit_price REAL NOT NULL DEFAULT 0 CHECK (estimated_unit_price >= 0),
     actual_unit_price REAL CHECK (actual_unit_price IS NULL OR actual_unit_price >= 0),
@@ -100,13 +101,15 @@ CREATE TABLE IF NOT EXISTS project_materials (
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at TEXT NOT NULL DEFAULT (datetime('now')),
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
-    FOREIGN KEY (material_id) REFERENCES materials(id) ON DELETE RESTRICT
+    FOREIGN KEY (material_id) REFERENCES materials(id) ON DELETE RESTRICT,
+    FOREIGN KEY (merchant_id) REFERENCES merchants(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS project_tools (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     project_id INTEGER NOT NULL,
     tool_id INTEGER NOT NULL,
+    merchant_id INTEGER,
     quantity INTEGER NOT NULL DEFAULT 1 CHECK (quantity > 0),
     already_owned INTEGER NOT NULL DEFAULT 0 CHECK (already_owned IN (0, 1)),
     estimated_unit_price REAL NOT NULL DEFAULT 0 CHECK (estimated_unit_price >= 0),
@@ -115,7 +118,8 @@ CREATE TABLE IF NOT EXISTS project_tools (
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at TEXT NOT NULL DEFAULT (datetime('now')),
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
-    FOREIGN KEY (tool_id) REFERENCES tools(id) ON DELETE RESTRICT
+    FOREIGN KEY (tool_id) REFERENCES tools(id) ON DELETE RESTRICT,
+    FOREIGN KEY (merchant_id) REFERENCES merchants(id) ON DELETE SET NULL
 );
 
 -- ============================================================

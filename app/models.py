@@ -95,6 +95,8 @@ class Merchant(db.Model):
 
     materials = db.relationship("Material", back_populates="merchant")
     tools = db.relationship("Tool", back_populates="merchant")
+    project_materials = db.relationship("ProjectMaterial", back_populates="merchant")
+    project_tools = db.relationship("ProjectTool", back_populates="merchant")
 
 
 class Material(db.Model):
@@ -144,6 +146,7 @@ class ProjectMaterial(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     project_id = db.Column(db.Integer, db.ForeignKey("projects.id"), nullable=False, index=True)
     material_id = db.Column(db.Integer, db.ForeignKey("materials.id"), nullable=False, index=True)
+    merchant_id = db.Column(db.Integer, db.ForeignKey("merchants.id"), nullable=True, index=True)
     quantity = db.Column(db.Integer, nullable=False)
     estimated_unit_price = db.Column(db.Numeric(10, 2), nullable=False, default=0)
     actual_unit_price = db.Column(db.Numeric(10, 2), nullable=True)
@@ -153,6 +156,7 @@ class ProjectMaterial(db.Model):
 
     project = db.relationship("Project", back_populates="project_materials")
     material = db.relationship("Material", back_populates="project_materials")
+    merchant = db.relationship("Merchant", back_populates="project_materials")
 
 
 class ProjectTool(db.Model):
@@ -161,6 +165,7 @@ class ProjectTool(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     project_id = db.Column(db.Integer, db.ForeignKey("projects.id"), nullable=False, index=True)
     tool_id = db.Column(db.Integer, db.ForeignKey("tools.id"), nullable=False, index=True)
+    merchant_id = db.Column(db.Integer, db.ForeignKey("merchants.id"), nullable=True, index=True)
     quantity = db.Column(db.Integer, nullable=False, default=1)
     already_owned = db.Column(db.Boolean, nullable=False, default=False)
     estimated_unit_price = db.Column(db.Numeric(10, 2), nullable=False, default=0)
@@ -171,6 +176,7 @@ class ProjectTool(db.Model):
 
     project = db.relationship("Project", back_populates="project_tools")
     tool = db.relationship("Tool", back_populates="project_tools")
+    merchant = db.relationship("Merchant", back_populates="project_tools")
 
 
 class Media(db.Model):
