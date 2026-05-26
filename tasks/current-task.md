@@ -1,10 +1,10 @@
 # Current Task
-Implement Merchants CRUD
+Implement Material Categories CRUD
 
 ## Summary
-Add merchant management so materials, tools, and purchases can reference a source.
+Add material category management for the global catalog.
 
 ## Acceptance Criteria
-- CRUD exists for merchant name, website URL, and notes.
-- Materials and tools can optionally point to a default merchant.
-- Project purchase records can optionally reference a merchant.
+- CRUD exists for category name and description.
+- Materials can reference a category.
+- Validation prevents duplicate category names if uniqueness is enforced.
