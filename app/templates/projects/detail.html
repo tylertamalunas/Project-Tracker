@@ -130,5 +130,70 @@
 </div>
 {% endif %}
 
+<!-- Tools Table -->
+<h3 class="mt-4">Tools</h3>
+{% if project.status != 'completed' %}
+    <a href="/projects/{{ project.id }}/tools/new" class="btn btn-sm btn-primary mb-2">+ Add Tool</a>
+{% endif %}
+{% if tools %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Tool</th>
+            <th>Qty</th>
+            <th>Owned</th>
+            <th class="text-end">Est. Price</th>
+            <th class="text-end">Actual Price</th>
+            <th class="text-end">Cost Contribution</th>
+            <th>Merchant</th>
+            <th>Purchased</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pt in tools %}
+        <tr>
+            <td>{{ pt.tool.name }}</td>
+            <td>{{ pt.quantity }}</td>
+            <td>
+                {% if pt.already_owned %}
+                    <span class="badge bg-info">Owned</span>
+                {% else %}
+                    <span class="badge bg-warning text-dark">Purchased</span>
+                {% endif %}
+            </td>
+            <td class="text-end">${{ "%.2f"|format(pt.estimated_unit_price|float) }}</td>
+            <td class="text-end">
+                {% if pt.actual_unit_price is not none %}
+                    ${{ "%.2f"|format(pt.actual_unit_price|float) }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+            <td class="text-end">
+                {% if pt.already_owned %}
+                    <span class="text-muted">$0.00 (owned)</span>
+                {% elif pt.actual_unit_price is not none %}
+                    ${{ "%.2f"|format(pt.quantity * (pt.actual_unit_price|float)) }}
+                {% else %}
+                    ~${{ "%.2f"|format(pt.quantity * (pt.estimated_unit_price|float)) }}
+                {% endif %}
+            </td>
+            <td>{{ pt.merchant.name if pt.merchant else '—' }}</td>
+            <td>{{ pt.purchased_on.strftime('%Y-%m-%d') if pt.purchased_on else '—' }}</td>
+            <td>{{ pt.notes or '' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="alert alert-info">
+    No tools attached yet.
+    {% if project.status != 'completed' %}
+        <a href="/projects/{{ project.id }}/tools/new">Add one</a>.
+    {% endif %}
+</div>
+{% endif %}
+
 <a href="/projects" class="btn btn-outline-secondary mt-3">← Back to Projects</a>
 {% endblock %}

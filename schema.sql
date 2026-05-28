@@ -116,6 +116,7 @@ CREATE TABLE IF NOT EXISTS project_tools (
     already_owned INTEGER NOT NULL DEFAULT 0 CHECK (already_owned IN (0, 1)),
     estimated_unit_price REAL NOT NULL DEFAULT 0 CHECK (estimated_unit_price >= 0),
     actual_unit_price REAL CHECK (actual_unit_price IS NULL OR actual_unit_price >= 0),
+    purchased_on TEXT,
     notes TEXT DEFAULT '',
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at TEXT NOT NULL DEFAULT (datetime('now')),

@@ -172,6 +172,7 @@ class ProjectTool(db.Model):
     already_owned = db.Column(db.Boolean, nullable=False, default=False)
     estimated_unit_price = db.Column(db.Numeric(10, 2), nullable=False, default=0)
     actual_unit_price = db.Column(db.Numeric(10, 2), nullable=True)
+    purchased_on = db.Column(db.DateTime, nullable=True)
     notes = db.Column(db.Text, default="")
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
