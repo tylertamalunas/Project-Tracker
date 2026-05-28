@@ -1,10 +1,11 @@
-"""Seed script: populates the database with sample categories, merchants, materials, and tools.
+"""Seed script: populates the database with sample categories, merchants, materials, tools, and projects.
 
 Usage:
     python seed.py          # Insert seed data (skips if data already exists)
     python seed.py --reset  # Drop all data and re-seed from scratch
 """
 import sys
+from datetime import date
 from app import create_app, db
 from app.models import (
     MaterialCategory,
@@ -12,11 +13,17 @@ from app.models import (
     Merchant,
     Material,
     Tool,
+    Project,
+    ProjectMaterial,
+    ProjectTool,
 )
 
 
 def clear_data():
-    """Remove all seed-able data (preserves projects and user content)."""
+    """Remove all seed-able data (preserves nothing on full reset)."""
+    ProjectMaterial.query.delete()
+    ProjectTool.query.delete()
+    Project.query.delete()
     Material.query.delete()
     Tool.query.delete()
     Merchant.query.delete()
@@ -128,6 +135,123 @@ def seed_tools():
     print(f"  Added {len(tools)} tools.")
 
 
+def seed_projects():
+    """Create sample projects with attached materials and tools."""
+    home_depot = Merchant.query.filter_by(name="Home Depot").first()
+    lowes = Merchant.query.filter_by(name="Lowe's").first()
+
+    stud = Material.query.filter_by(name="2x4x8 Stud").first()
+    plywood = Material.query.filter_by(name='4x8 Plywood (3/4")').first()
+    screws = Material.query.filter_by(name="#8 x 2.5\" Wood Screws (100pk)").first()
+    paint = Material.query.filter_by(name="Interior Latex Paint (1 gal)").first()
+    primer = Material.query.filter_by(name="Primer (1 gal)").first()
+
+    drill = Tool.query.filter_by(name="Cordless Drill/Driver").first()
+    saw = Tool.query.filter_by(name="Circular Saw").first()
+    tape = Tool.query.filter_by(name="25ft Tape Measure").first()
+    roller = Tool.query.filter_by(name="Paint Roller Kit").first()
+
+    # Project 1: Kitchen Remodel (active, with materials and tools)
+    p1 = Project(
+        name="Kitchen Cabinet Refresh",
+        description="Sand, prime, and repaint all kitchen cabinets. Replace hardware.",
+        status="active",
+        start_date=date(2026, 4, 15),
+        budget_estimate=800.00,
+        notes="Using semi-gloss for durability",
+    )
+    db.session.add(p1)
+    db.session.commit()
+
+    # Attach materials to project 1
+    pm_items = [
+        ProjectMaterial(project_id=p1.id, material_id=paint.id, merchant_id=lowes.id,
+                        quantity=3, unit_of_measure="gallon",
+                        estimated_unit_price=34.98, actual_unit_price=32.00,
+                        purchased_on=date(2026, 4, 16), notes="Color: Swiss Coffee"),
+        ProjectMaterial(project_id=p1.id, material_id=primer.id, merchant_id=home_depot.id,
+                        quantity=2, unit_of_measure="gallon",
+                        estimated_unit_price=22.00, actual_unit_price=22.00,
+                        purchased_on=date(2026, 4, 16)),
+        ProjectMaterial(project_id=p1.id, material_id=screws.id, merchant_id=home_depot.id,
+                        quantity=1, unit_of_measure="box",
+                        estimated_unit_price=9.97, actual_unit_price=9.97,
+                        purchased_on=date(2026, 4, 16)),
+    ]
+    db.session.add_all(pm_items)
+
+    # Attach tools to project 1
+    pt_items = [
+        ProjectTool(project_id=p1.id, tool_id=roller.id,
+                    quantity=1, already_owned=False,
+                    estimated_unit_price=18.00, actual_unit_price=18.00),
+        ProjectTool(project_id=p1.id, tool_id=drill.id,
+                    quantity=1, already_owned=True,
+                    estimated_unit_price=0, actual_unit_price=0),
+    ]
+    db.session.add_all(pt_items)
+    db.session.commit()
+
+    # Project 2: Deck Build (planned, no purchases yet)
+    p2 = Project(
+        name="Backyard Deck Build",
+        description="12x16 pressure-treated deck with stairs and railing.",
+        status="planned",
+        budget_estimate=3500.00,
+        notes="Waiting on permit approval",
+    )
+    db.session.add(p2)
+    db.session.commit()
+
+    pm_items2 = [
+        ProjectMaterial(project_id=p2.id, material_id=stud.id,
+                        quantity=48, unit_of_measure="each",
+                        estimated_unit_price=3.98),
+        ProjectMaterial(project_id=p2.id, material_id=plywood.id,
+                        quantity=6, unit_of_measure="sheet",
+                        estimated_unit_price=45.00),
+    ]
+    db.session.add_all(pm_items2)
+
+    pt_items2 = [
+        ProjectTool(project_id=p2.id, tool_id=saw.id,
+                    quantity=1, already_owned=False,
+                    estimated_unit_price=129.00),
+        ProjectTool(project_id=p2.id, tool_id=tape.id,
+                    quantity=1, already_owned=True,
+                    estimated_unit_price=0),
+    ]
+    db.session.add_all(pt_items2)
+    db.session.commit()
+
+    # Project 3: Bathroom Paint (completed)
+    p3 = Project(
+        name="Bathroom Repaint",
+        description="Repaint master bathroom walls and trim.",
+        status="completed",
+        start_date=date(2026, 3, 1),
+        end_date=date(2026, 3, 8),
+        budget_estimate=200.00,
+    )
+    db.session.add(p3)
+    db.session.commit()
+
+    pm_items3 = [
+        ProjectMaterial(project_id=p3.id, material_id=paint.id, merchant_id=home_depot.id,
+                        quantity=1, unit_of_measure="gallon",
+                        estimated_unit_price=34.98, actual_unit_price=34.98,
+                        purchased_on=date(2026, 3, 1)),
+        ProjectMaterial(project_id=p3.id, material_id=primer.id, merchant_id=home_depot.id,
+                        quantity=1, unit_of_measure="gallon",
+                        estimated_unit_price=22.00, actual_unit_price=22.00,
+                        purchased_on=date(2026, 3, 1)),
+    ]
+    db.session.add_all(pm_items3)
+    db.session.commit()
+
+    print(f"  Added 3 sample projects with materials and tools.")
+
+
 def main():
     app = create_app()
     with app.app_context():
@@ -147,6 +271,7 @@ def main():
         seed_merchants()
         seed_materials()
         seed_tools()
+        seed_projects()
         print("Done! Seed data loaded successfully.")
 
 
