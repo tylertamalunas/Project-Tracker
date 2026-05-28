@@ -1,10 +1,11 @@
 # Current Task
-Implement Tool Categories CRUD
+Implement project-material association workflow
 
 ## Summary
-Add tool category management for the global catalog.
+Allow users to add a material to a project from the global catalog and record project-specific quantities and prices.
 
 ## Acceptance Criteria
-- CRUD exists for category name and description.
-- Tools can reference a category.
-- Validation prevents duplicate category names if uniqueness is enforced.
+- User can attach a material to a project.
+- Fields include quantity, unit_of_measure, estimated_unit_price, actual_unit_price, notes, purchased_on, and merchant.
+- Project detail page lists attached materials.
+- Totals use project-specific prices rather than catalog defaults.

@@ -148,9 +148,11 @@ class ProjectMaterial(db.Model):
     material_id = db.Column(db.Integer, db.ForeignKey("materials.id"), nullable=False, index=True)
     merchant_id = db.Column(db.Integer, db.ForeignKey("merchants.id"), nullable=True, index=True)
     quantity = db.Column(db.Integer, nullable=False)
+    unit_of_measure = db.Column(db.String(200), default="")
     estimated_unit_price = db.Column(db.Numeric(10, 2), nullable=False, default=0)
     actual_unit_price = db.Column(db.Numeric(10, 2), nullable=True)
     notes = db.Column(db.Text, default="")
+    purchased_on = db.Column(db.DateTime, nullable=True, default=lambda: datetime.now(timezone.utc))
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 

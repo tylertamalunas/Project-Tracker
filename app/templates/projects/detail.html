@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.name }} — Project Tracker{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>{{ project.name }}</h1>
+    <div>
+        {% if project.status != 'completed' %}
+            <a href="/projects/{{ project.id }}/edit" class="btn btn-outline-secondary">Edit Project</a>
+            <a href="/projects/{{ project.id }}/materials/new" class="btn btn-primary">+ Add Material</a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Project Metadata -->
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Status:</strong>
+                    {% if project.status == 'completed' %}
+                        <span class="badge bg-success">Completed</span>
+                    {% elif project.status == 'active' %}
+                        <span class="badge bg-primary">Active</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Planned</span>
+                    {% endif %}
+                </p>
+                <p><strong>Description:</strong> {{ project.description or '—' }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Start Date:</strong> {{ project.start_date or '—' }}</p>
+                <p><strong>End Date:</strong> {{ project.end_date or '—' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cost Summary -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card summary-card">
+            <div class="card-body">
+                <h6 class="card-subtitle text-muted">Estimated Total</h6>
+                <h4>${{ "%.2f"|format(project.estimated_total) }}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card summary-card">
+            <div class="card-body">
+                <h6 class="card-subtitle text-muted">Actual Total</h6>
+                <h4>${{ "%.2f"|format(project.actual_total) }}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card summary-card {% if project.variance > 0 %}danger{% elif project.variance < 0 %}success{% endif %}">
+            <div class="card-body">
+                <h6 class="card-subtitle text-muted">Variance</h6>
+                <h4>
+                    {% set v = project.variance %}
+                    {% if v > 0 %}
+                        <span class="text-danger">+${{ "%.2f"|format(v) }}</span>
+                    {% elif v < 0 %}
+                        <span class="text-success">-${{ "%.2f"|format(v|abs) }}</span>
+                    {% else %}
+                        $0.00
+                    {% endif %}
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Materials Table -->
+<h3>Materials</h3>
+{% if materials %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Material</th>
+            <th>Qty</th>
+            <th>Unit</th>
+            <th class="text-end">Est. Price</th>
+            <th class="text-end">Actual Price</th>
+            <th class="text-end">Est. Subtotal</th>
+            <th class="text-end">Actual Subtotal</th>
+            <th>Merchant</th>
+            <th>Purchased</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pm in materials %}
+        <tr>
+            <td>{{ pm.material.name }}</td>
+            <td>{{ pm.quantity }}</td>
+            <td>{{ pm.unit_of_measure or '—' }}</td>
+            <td class="text-end">${{ "%.2f"|format(pm.estimated_unit_price|float) }}</td>
+            <td class="text-end">
+                {% if pm.actual_unit_price is not none %}
+                    ${{ "%.2f"|format(pm.actual_unit_price|float) }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+            <td class="text-end">${{ "%.2f"|format(pm.quantity * (pm.estimated_unit_price|float)) }}</td>
+            <td class="text-end">
+                {% if pm.actual_unit_price is not none %}
+                    ${{ "%.2f"|format(pm.quantity * (pm.actual_unit_price|float)) }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+            <td>{{ pm.merchant.name if pm.merchant else '—' }}</td>
+            <td>{{ pm.purchased_on.strftime('%Y-%m-%d') if pm.purchased_on else '—' }}</td>
+            <td>{{ pm.notes or '' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="alert alert-info">
+    No materials attached yet.
+    {% if project.status != 'completed' %}
+        <a href="/projects/{{ project.id }}/materials/new">Add one</a>.
+    {% endif %}
+</div>
+{% endif %}
+
+<a href="/projects" class="btn btn-outline-secondary mt-3">← Back to Projects</a>
+{% endblock %}
