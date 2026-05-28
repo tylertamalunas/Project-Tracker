@@ -27,31 +27,15 @@ class Project(db.Model):
 
     @property
     def estimated_total(self):
-        """Sum of (quantity * estimated_unit_price) for materials and tools."""
-        material_est = sum(
-            pm.quantity * (pm.estimated_unit_price or 0)
-            for pm in self.project_materials
-        )
-        tool_est = sum(
-            pt.quantity * (pt.estimated_unit_price or 0)
-            for pt in self.project_tools
-            if not pt.already_owned
-        )
-        return material_est + tool_est
+        """Sum of (quantity * estimated_unit_price) for materials and purchased tools."""
+        from app.services.cost_service import _sum_material_estimated, _sum_tool_estimated
+        return _sum_material_estimated(self.project_materials) + _sum_tool_estimated(self.project_tools)
 
     @property
     def actual_total(self):
         """Sum of (quantity * actual_unit_price) for materials and purchased tools."""
-        material_act = sum(
-            pm.quantity * (pm.actual_unit_price or 0)
-            for pm in self.project_materials
-        )
-        tool_act = sum(
-            pt.quantity * (pt.actual_unit_price or 0)
-            for pt in self.project_tools
-            if not pt.already_owned
-        )
-        return material_act + tool_act
+        from app.services.cost_service import _sum_material_actual, _sum_tool_actual
+        return _sum_material_actual(self.project_materials) + _sum_tool_actual(self.project_tools)
 
     @property
     def variance(self):

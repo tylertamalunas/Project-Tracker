@@ -1,11 +1,12 @@
 # Current Task
-Implement project-tool association workflow
+Implement project totals and variance calculations
+
 
 ## Summary
-Allow users to add a tool to a project with already-owned logic and project-specific pricing.
+Compute estimated total, actual total, and variance at the project level.
 
 ## Acceptance Criteria
-- User can attach a tool to a project.
-- Fields include quantity, already_owned, estimated_unit_price, actual_unit_price, notes, purchased_on, and merchant.
-- Project detail page lists attached tools.
-- If already_owned is true, actual cost contribution is excluded from totals.
+- Material total = sum(quantity * chosen material unit price field).
+- Tool total counts only purchased tools toward actual spend.
+- Project detail page shows estimated total, actual total, and variance.
+- Calculation logic lives in one clear service layer.
