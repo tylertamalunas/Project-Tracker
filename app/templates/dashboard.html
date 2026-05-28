@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — Project Tracker{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Dashboard</h1>
+
+<!-- Summary Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card summary-card">
+            <div class="card-body">
+                <h6 class="card-subtitle text-muted">Total Projects</h6>
+                <h3>{{ total_projects }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card summary-card">
+            <div class="card-body">
+                <h6 class="card-subtitle text-muted">Active Projects</h6>
+                <h3>{{ active_projects }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card summary-card success">
+            <div class="card-body">
+                <h6 class="card-subtitle text-muted">Completed Projects</h6>
+                <h3>{{ completed_projects }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card summary-card warning">
+            <div class="card-body">
+                <h6 class="card-subtitle text-muted">Total Actual Spend</h6>
+                <h3>${{ "%.2f"|format(total_spend) }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Global Spend Breakdown -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5>Spend Breakdown</h5>
+                <table class="table table-sm mb-0">
+                    <tbody>
+                        <tr>
+                            <td>Materials (all-time actual)</td>
+                            <td class="text-end"><strong>${{ "%.2f"|format(material_spend) }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Tools — purchased (all-time actual)</td>
+                            <td class="text-end"><strong>${{ "%.2f"|format(tool_spend) }}</strong></td>
+                        </tr>
+                        <tr class="table-active">
+                            <td><strong>Total</strong></td>
+                            <td class="text-end"><strong>${{ "%.2f"|format(total_spend) }}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5>Quick Actions</h5>
+                <a href="/projects/new" class="btn btn-primary me-2">+ New Project</a>
+                <a href="/projects" class="btn btn-outline-secondary">View All Projects</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Projects -->
+<h3>Recent Projects</h3>
+{% if recent_projects %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th class="text-end">Actual Total</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for project in recent_projects %}
+        <tr>
+            <td>{{ project.name }}</td>
+            <td>
+                {% if project.status == 'active' %}
+                    <span class="badge bg-primary">Active</span>
+                {% else %}
+                    <span class="badge bg-secondary">Planned</span>
+                {% endif %}
+            </td>
+            <td class="text-end">${{ "%.2f"|format(project.actual_total) }}</td>
+            <td><a href="/projects/{{ project.id }}" class="btn btn-sm btn-outline-primary">View</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="alert alert-info">
+    No active or planned projects yet. <a href="/projects/new">Create one</a>.
+</div>
+{% endif %}
+{% endblock %}

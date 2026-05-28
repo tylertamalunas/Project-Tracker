@@ -1,12 +1,11 @@
 # Current Task
-Implement project totals and variance calculations
-
+Implement global spend summaries
 
 ## Summary
-Compute estimated total, actual total, and variance at the project level.
+Create reusable queries for all-time material and tool spend.
 
 ## Acceptance Criteria
-- Material total = sum(quantity * chosen material unit price field).
-- Tool total counts only purchased tools toward actual spend.
-- Project detail page shows estimated total, actual total, and variance.
-- Calculation logic lives in one clear service layer.
+- Material global total sums actual project material spend.
+- Tool global total sums only purchased project tool spend.
+- Dashboard or summary page exposes the metrics.
+- Query behavior is documented for null and zero-price rows.

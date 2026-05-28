@@ -149,3 +149,71 @@ def _sum_tool_actual(project_tools):
         for pt in project_tools
         if not pt.already_owned
     )
+
+
+# ============================================================
+# Global Spend Summaries
+# ============================================================
+
+def get_global_material_spend():
+    """Calculate all-time actual material spend across all projects.
+
+    Formula:
+        SUM(project_materials.quantity * project_materials.actual_unit_price)
+        across ALL project_materials rows.
+
+    Null handling:
+        - Rows where actual_unit_price is NULL contribute $0.
+        - Rows where actual_unit_price is 0 contribute $0 (zero-price rows are included
+          in the sum but produce no spend).
+
+    Returns:
+        Float total actual material spend.
+    """
+    all_pm = ProjectMaterial.query.all()
+    return sum(
+        pm.quantity * float(pm.actual_unit_price or 0)
+        for pm in all_pm
+    )
+
+
+def get_global_tool_spend():
+    """Calculate all-time actual tool spend across all projects (purchased only).
+
+    Formula:
+        SUM(project_tools.quantity * project_tools.actual_unit_price)
+        WHERE already_owned = false, across ALL project_tools rows.
+
+    Null handling:
+        - Rows where actual_unit_price is NULL contribute $0.
+        - Rows where already_owned = true are excluded entirely.
+        - Rows where actual_unit_price is 0 contribute $0 (zero-price rows are included
+          but produce no spend).
+
+    Returns:
+        Float total actual tool spend (purchased tools only).
+    """
+    all_pt = ProjectTool.query.all()
+    return sum(
+        pt.quantity * float(pt.actual_unit_price or 0)
+        for pt in all_pt
+        if not pt.already_owned
+    )
+
+
+def get_global_spend_summary():
+    """Get a full global spend summary in one call.
+
+    Returns:
+        Dict with keys:
+            material_spend: all-time actual material spend
+            tool_spend: all-time actual purchased tool spend
+            total_spend: material_spend + tool_spend
+    """
+    material_spend = get_global_material_spend()
+    tool_spend = get_global_tool_spend()
+    return {
+        "material_spend": material_spend,
+        "tool_spend": tool_spend,
+        "total_spend": material_spend + tool_spend,
+    }
