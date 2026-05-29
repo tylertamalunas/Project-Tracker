@@ -37,6 +37,37 @@
     </div>
 </div>
 
+<!-- Project Hierarchy -->
+{% if parent_project or child_projects %}
+<div class="card mb-4">
+    <div class="card-body">
+        <h5>Project Hierarchy</h5>
+        {% if parent_project %}
+        <p><strong>Parent Project:</strong>
+            <a href="/projects/{{ parent_project.id }}">{{ parent_project.name }}</a>
+        </p>
+        {% endif %}
+        {% if child_projects %}
+        <p><strong>Sub-Projects:</strong></p>
+        <ul>
+            {% for child in child_projects %}
+            <li>
+                <a href="/projects/{{ child.id }}">{{ child.name }}</a>
+                {% if child.status == 'completed' %}
+                    <span class="badge bg-success">Completed</span>
+                {% elif child.status == 'active' %}
+                    <span class="badge bg-primary">Active</span>
+                {% else %}
+                    <span class="badge bg-secondary">Planned</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
 <!-- Cost Summary -->
 <div class="row mb-4">
     <div class="col-md-4">
