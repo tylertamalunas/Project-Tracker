@@ -1,10 +1,11 @@
 # Current Task
-Build project list and project detail pages
+Build create/edit project forms
+
 
 ## Summary
-Create the primary pages for viewing projects.
+Create forms for adding and editing projects.
 
 ## Acceptance Criteria
-- Project list shows name, status, key dates, and high-level totals.
-- Project detail shows description, notes, totals, materials, tools, media, and related records.
-- Pages use the base layout and navigation.
+- Form supports all MVP project fields.
+- Validation errors are shown inline or clearly at the top.
+- Successful submit redirects to the project detail page.
