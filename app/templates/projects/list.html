@@ -23,7 +23,8 @@
         <tr>
             <th>Name</th>
             <th>Status</th>
-            <th>Created</th>
+            <th>Start Date</th>
+            <th>End Date</th>
             <th class="text-end">Estimated Total</th>
             <th class="text-end">Actual Total</th>
             <th class="text-end">Variance</th>
@@ -43,7 +44,8 @@
                     <span class="badge bg-secondary">Planned</span>
                 {% endif %}
             </td>
-            <td>{{ project.created_at.strftime('%Y-%m-%d') if project.created_at else '' }}</td>
+            <td>{{ project.start_date or '—' }}</td>
+            <td>{{ project.end_date or '—' }}</td>
             <td class="text-end">${{ "%.2f"|format(project.estimated_total) }}</td>
             <td class="text-end">${{ "%.2f"|format(project.actual_total) }}</td>
             <td class="text-end">

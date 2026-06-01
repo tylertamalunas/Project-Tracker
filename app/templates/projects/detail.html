@@ -32,6 +32,9 @@
             <div class="col-md-6">
                 <p><strong>Start Date:</strong> {{ project.start_date or '—' }}</p>
                 <p><strong>End Date:</strong> {{ project.end_date or '—' }}</p>
+                {% if project.notes %}
+                <p><strong>Notes:</strong> {{ project.notes }}</p>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -251,6 +254,41 @@
     No tools attached yet.
     {% if project.status != 'completed' %}
         <a href="/projects/{{ project.id }}/tools/new">Add one</a>.
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Media Section -->
+<h3 class="mt-4">Media</h3>
+{% if project.status != 'completed' %}
+    <a href="/projects/{{ project.id }}/media/new" class="btn btn-sm btn-primary mb-2">+ Upload Media</a>
+{% endif %}
+{% if project.media %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>File Name</th>
+            <th>Type</th>
+            <th>Uploaded</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in project.media %}
+        <tr>
+            <td>{{ m.file_name }}</td>
+            <td><span class="badge bg-secondary">{{ m.media_type }}</span></td>
+            <td>{{ m.created_at.strftime('%Y-%m-%d') if m.created_at else '—' }}</td>
+            <td>{{ m.notes or '' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="alert alert-info">
+    No media uploaded yet.
+    {% if project.status != 'completed' %}
+        <a href="/projects/{{ project.id }}/media/new">Upload one</a>.
     {% endif %}
 </div>
 {% endif %}

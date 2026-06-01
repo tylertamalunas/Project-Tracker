@@ -1,10 +1,10 @@
 # Current Task
-Implement related-project links
+Build project list and project detail pages
 
 ## Summary
-Allow non-hierarchical project relationships such as 'depends_on' or 'similar_to'.
+Create the primary pages for viewing projects.
 
 ## Acceptance Criteria
-- User can create a relationship between two projects.
-- Relationship includes a type and optional note.
-- Project detail page displays related projects separately from hierarchy.
+- Project list shows name, status, key dates, and high-level totals.
+- Project detail shows description, notes, totals, materials, tools, media, and related records.
+- Pages use the base layout and navigation.
