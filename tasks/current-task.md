@@ -1,10 +1,10 @@
 # Current Task
-Implement project hierarchy support
+Implement related-project links
 
 ## Summary
-Add parent-child relationships so larger projects can contain sub-projects.
+Allow non-hierarchical project relationships such as 'depends_on' or 'similar_to'.
 
 ## Acceptance Criteria
-- User can link a child project to a parent project.
-- Project detail page displays parent and child relationships.
-- Validation prevents self-linking and simple circular references.
+- User can create a relationship between two projects.
+- Relationship includes a type and optional note.
+- Project detail page displays related projects separately from hierarchy.

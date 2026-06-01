@@ -68,6 +68,35 @@
 </div>
 {% endif %}
 
+<!-- Related Projects -->
+{% if related_projects %}
+<div class="card mb-4">
+    <div class="card-body">
+        <h5>Related Projects</h5>
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Relationship</th>
+                    <th>Direction</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rel in related_projects %}
+                <tr>
+                    <td><a href="/projects/{{ rel.project.id }}">{{ rel.project.name }}</a></td>
+                    <td><span class="badge bg-info">{{ rel.relationship_type }}</span></td>
+                    <td>{{ rel.direction }}</td>
+                    <td>{{ rel.notes or '—' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
 <!-- Cost Summary -->
 <div class="row mb-4">
     <div class="col-md-4">
