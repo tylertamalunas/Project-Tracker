@@ -1,11 +1,10 @@
 # Current Task
-Build create/edit project forms
-
+Build materials catalog pages and forms
 
 ## Summary
-Create forms for adding and editing projects.
+Create list/detail/create/edit pages for materials.
 
 ## Acceptance Criteria
-- Form supports all MVP project fields.
-- Validation errors are shown inline or clearly at the top.
-- Successful submit redirects to the project detail page.
+- User can browse and manage global materials.
+- List page supports basic filtering.
+- Forms support category, merchant, unit, default price, and notes.
