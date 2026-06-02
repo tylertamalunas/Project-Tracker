@@ -3,8 +3,12 @@ def register_blueprints(app):
     from app.routes.dashboard import dashboard_bp
     from app.routes.materials import materials_bp
     from app.routes.tools import tools_bp
+    from app.routes.merchants import merchants_bp
+    from app.routes.categories import categories_bp
 
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(projects_bp)
     app.register_blueprint(materials_bp)
     app.register_blueprint(tools_bp)
+    app.register_blueprint(merchants_bp)
+    app.register_blueprint(categories_bp)

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ action }} {{ category_type }} Category — Project Tracker{% endblock %}
+{% block content %}
+<h1>{{ action }} {{ category_type }} Category</h1>
+
+{% if errors %}
+<div class="alert alert-danger">
+    <ul class="mb-0">{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+
+<form method="POST">
+    <div class="mb-3">
+        <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="name" name="name" value="{{ category.name or '' }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="2">{{ category.description or '' }}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">{% if action == 'Create' %}Create{% else %}Save{% endif %}</button>
+    <a href="{{ base_url }}" class="btn btn-outline-secondary ms-2">Cancel</a>
+</form>
+{% endblock %}

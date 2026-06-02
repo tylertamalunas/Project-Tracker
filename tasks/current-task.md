@@ -1,10 +1,11 @@
 # Current Task
-Build tools catalog pages and forms
+Build merchant and category management pages
 
 ## Summary
-Create list/detail/create/edit pages for tools.
+Create simple admin-style pages for merchants and categories.
 
 ## Acceptance Criteria
-- User can browse and manage global tools.
-- List page supports basic filtering.
-- Forms support category, merchant, default price, brand/model, and notes.
+- User can list/create/edit/delete merchants.
+- User can list/create/edit/delete material categories.
+- User can list/create/edit/delete tool categories.
+- Navigation exposes these pages without clutter.

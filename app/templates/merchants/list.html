@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Merchants — Project Tracker{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Merchants</h1>
+    <a href="/merchants/new" class="btn btn-primary">+ New Merchant</a>
+</div>
+
+<form class="mb-3 d-flex gap-2" method="GET">
+    <input type="text" class="form-control" name="q" value="{{ query }}" placeholder="Search by name...">
+    <button type="submit" class="btn btn-outline-secondary">Search</button>
+    {% if query %}<a href="/merchants" class="btn btn-outline-secondary">Clear</a>{% endif %}
+</form>
+
+{% if merchants %}
+<table class="table table-striped">
+    <thead>
+        <tr><th>Name</th><th>Website</th><th>Notes</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+        {% for m in merchants %}
+        <tr>
+            <td>{{ m.name }}</td>
+            <td>{% if m.website %}<a href="{{ m.website }}" target="_blank">{{ m.website }}</a>{% else %}—{% endif %}</td>
+            <td>{{ m.notes or '—' }}</td>
+            <td>
+                <a href="/merchants/{{ m.id }}/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+                <form method="POST" action="/merchants/{{ m.id }}/delete" class="d-inline"
+                      onsubmit="return confirm('Delete this merchant?')">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="alert alert-info">No merchants found.</div>
+{% endif %}
+{% endblock %}
