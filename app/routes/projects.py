@@ -25,12 +25,22 @@ def project_list():
 @projects_bp.route("/projects/<int:project_id>")
 def project_detail(project_id):
     """Show a full view of one project with attached materials and tools."""
+    from app.services import media_link_service
+
     project = Project.query.get_or_404(project_id)
     materials = project_material_service.list_project_materials(project_id)
     tools = project_tool_service.list_project_tools(project_id)
     parent_project = project_hierarchy_service.get_parent_project(project_id)
     child_projects = project_hierarchy_service.get_child_projects(project_id)
     related_projects = project_relationship_service.get_related_projects(project_id)
+
+    # Build media links lookup: {entity_type}_{entity_id} -> [Media]
+    material_media = {}
+    for pm in materials:
+        material_media[pm.id] = media_link_service.get_media_for_entity("project_material", pm.id)
+    tool_media = {}
+    for pt in tools:
+        tool_media[pt.id] = media_link_service.get_media_for_entity("project_tool", pt.id)
 
     return render_template(
         "projects/detail.html",
@@ -40,6 +50,8 @@ def project_detail(project_id):
         parent_project=parent_project,
         child_projects=child_projects,
         related_projects=related_projects,
+        material_media=material_media,
+        tool_media=tool_media,
     )
 
 

@@ -1,10 +1,11 @@
 # Current Task
-Build media upload and gallery UI on project detail page
+Add server-side validation for all create/edit forms
 
 ## Summary
-Allow users to upload and view files attached to a project.
+Ensure invalid data is rejected consistently across the app.
 
 ## Acceptance Criteria
-- Project detail page includes media upload form.
-- Media list/gallery shows file name, type, uploaded date, and optional caption.
-- User can delete media and the underlying file is handled correctly.
+- Required fields are validated.
+- Numeric and date fields reject invalid formats.
+- Price and quantity rules are enforced.
+- Friendly validation errors are shown to the user.

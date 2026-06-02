@@ -188,6 +188,31 @@
                       onsubmit="return confirm('Remove this material?')">
                     <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
                 </form>
+                {% if project.media %}
+                <div class="dropdown d-inline">
+                    <button class="btn btn-sm btn-outline-info dropdown-toggle" data-bs-toggle="dropdown">📎</button>
+                    <ul class="dropdown-menu">
+                        {% for m in project.media %}
+                        <li>
+                            <form method="POST" action="/projects/{{ project.id }}/media/{{ m.id }}/link" class="px-2">
+                                <input type="hidden" name="entity_type" value="project_material">
+                                <input type="hidden" name="entity_id" value="{{ pm.id }}">
+                                <button type="submit" class="dropdown-item">{{ m.file_name }}</button>
+                            </form>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% endif %}
+                {% if material_media.get(pm.id) %}
+                <div class="mt-1">
+                    {% for linked in material_media[pm.id] %}
+                    <span class="badge bg-light text-dark border">
+                        📎 <a href="/uploads/{{ linked.file_path }}" class="text-decoration-none">{{ linked.file_name }}</a>
+                    </span>
+                    {% endfor %}
+                </div>
                 {% endif %}
             </td>
         </tr>
@@ -263,6 +288,31 @@
                       onsubmit="return confirm('Remove this tool?')">
                     <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
                 </form>
+                {% if project.media %}
+                <div class="dropdown d-inline">
+                    <button class="btn btn-sm btn-outline-info dropdown-toggle" data-bs-toggle="dropdown">📎</button>
+                    <ul class="dropdown-menu">
+                        {% for m in project.media %}
+                        <li>
+                            <form method="POST" action="/projects/{{ project.id }}/media/{{ m.id }}/link" class="px-2">
+                                <input type="hidden" name="entity_type" value="project_tool">
+                                <input type="hidden" name="entity_id" value="{{ pt.id }}">
+                                <button type="submit" class="dropdown-item">{{ m.file_name }}</button>
+                            </form>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% endif %}
+                {% if tool_media.get(pt.id) %}
+                <div class="mt-1">
+                    {% for linked in tool_media[pt.id] %}
+                    <span class="badge bg-light text-dark border">
+                        📎 <a href="/uploads/{{ linked.file_path }}" class="text-decoration-none">{{ linked.file_name }}</a>
+                    </span>
+                    {% endfor %}
+                </div>
                 {% endif %}
             </td>
         </tr>

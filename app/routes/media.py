@@ -75,3 +75,41 @@ def media_delete(project_id, media_id):
     except ValueError as e:
         flash(str(e), "danger")
     return redirect(url_for("projects.project_detail", project_id=project_id))
+
+
+# ============================================================
+# Media Links — associate media with line items
+# ============================================================
+
+from app.services import media_link_service
+
+
+@media_bp.route("/projects/<int:project_id>/media/<int:media_id>/link", methods=["POST"])
+def media_link_create(project_id, media_id):
+    """Link a media file to a project-material or project-tool row."""
+    entity_type = request.form.get("entity_type", "")
+    entity_id = request.form.get("entity_id", type=int)
+
+    try:
+        media_link_service.create_link(
+            media_id=media_id,
+            entity_type=entity_type,
+            entity_id=entity_id,
+        )
+        flash("Media linked to item.", "success")
+    except ValueError as e:
+        flash(str(e), "danger")
+
+    return redirect(url_for("projects.project_detail", project_id=project_id))
+
+
+@media_bp.route("/projects/<int:project_id>/media-links/<int:link_id>/delete", methods=["POST"])
+def media_link_delete(project_id, link_id):
+    """Remove a media link."""
+    try:
+        media_link_service.delete_link(link_id)
+        flash("Link removed.", "success")
+    except ValueError as e:
+        flash(str(e), "danger")
+
+    return redirect(url_for("projects.project_detail", project_id=project_id))
