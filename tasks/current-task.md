@@ -1,11 +1,10 @@
 # Current Task
-Implement local media upload storage service
+Build media upload and gallery UI on project detail page
 
 ## Summary
-Build local file handling for receipts, documents, and reference photos.
+Allow users to upload and view files attached to a project.
 
 ## Acceptance Criteria
-- Uploaded files are saved in a predictable local directory structure.
-- File metadata is saved to the `media` table.
-- Unsafe filenames are normalized.
-- App can serve or download saved files in development.
+- Project detail page includes media upload form.
+- Media list/gallery shows file name, type, uploaded date, and optional caption.
+- User can delete media and the underlying file is handled correctly.
