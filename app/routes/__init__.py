@@ -5,6 +5,7 @@ def register_blueprints(app):
     from app.routes.tools import tools_bp
     from app.routes.merchants import merchants_bp
     from app.routes.categories import categories_bp
+    from app.routes.media import media_bp
 
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(projects_bp)
@@ -12,3 +13,4 @@ def register_blueprints(app):
     app.register_blueprint(tools_bp)
     app.register_blueprint(merchants_bp)
     app.register_blueprint(categories_bp)
+    app.register_blueprint(media_bp)

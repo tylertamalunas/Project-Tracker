@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Upload Media — {{ project.name }}{% endblock %}
+{% block content %}
+<h1>Upload Media to "{{ project.name }}"</h1>
+
+{% if errors %}
+<div class="alert alert-danger">
+    <ul class="mb-0">{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="file" class="form-label">File <span class="text-danger">*</span></label>
+        <input type="file" class="form-control" id="file" name="file" required
+               accept=".png,.jpg,.jpeg,.gif,.pdf,.doc,.docx,.txt">
+        <div class="form-text">Accepted: PNG, JPG, GIF, PDF, DOC, DOCX, TXT (max 16 MB)</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="media_type" class="form-label">Type</label>
+        <select class="form-select" id="media_type" name="media_type">
+            <option value="receipt" {% if form_data.get('media_type') == 'receipt' %}selected{% endif %}>Receipt</option>
+            <option value="progress" {% if form_data.get('media_type') == 'progress' %}selected{% endif %}>Progress Photo</option>
+            <option value="document" {% if form_data.get('media_type') == 'document' %}selected{% endif %}>Document</option>
+            <option value="other" {% if form_data.get('media_type', 'other') == 'other' %}selected{% endif %}>Other</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="notes" class="form-label">Notes</label>
+        <textarea class="form-control" id="notes" name="notes" rows="2">{{ form_data.get('notes', '') }}</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Upload</button>
+    <a href="/projects/{{ project.id }}" class="btn btn-outline-secondary ms-2">Cancel</a>
+</form>
+{% endblock %}

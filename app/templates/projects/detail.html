@@ -291,15 +291,25 @@
             <th>Type</th>
             <th>Uploaded</th>
             <th>Notes</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         {% for m in project.media %}
         <tr>
-            <td>{{ m.file_name }}</td>
+            <td><a href="/uploads/{{ m.file_path }}">{{ m.file_name }}</a></td>
             <td><span class="badge bg-secondary">{{ m.media_type }}</span></td>
             <td>{{ m.created_at.strftime('%Y-%m-%d') if m.created_at else '—' }}</td>
             <td>{{ m.notes or '' }}</td>
+            <td>
+                <a href="/projects/{{ project.id }}/media/{{ m.id }}/download" class="btn btn-sm btn-outline-primary">Download</a>
+                {% if project.status != 'completed' %}
+                <form method="POST" action="/projects/{{ project.id }}/media/{{ m.id }}/delete" class="d-inline"
+                      onsubmit="return confirm('Delete this file?')">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
     </tbody>

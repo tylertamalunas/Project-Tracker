@@ -1,10 +1,11 @@
 # Current Task
-Add project forms for attaching materials and tools
+Implement local media upload storage service
 
 ## Summary
-Create forms embedded in or linked from project detail for adding project-specific inventory rows.
+Build local file handling for receipts, documents, and reference photos.
 
 ## Acceptance Criteria
-- User can choose an existing material or tool from the catalog.
-- Forms capture quantity, price fields, merchant, purchase date, and notes.
-- Editing and removing project rows is supported.
+- Uploaded files are saved in a predictable local directory structure.
+- File metadata is saved to the `media` table.
+- Unsafe filenames are normalized.
+- App can serve or download saved files in development.
