@@ -1,11 +1,10 @@
 # Current Task
-Build merchant and category management pages
+Add project forms for attaching materials and tools
 
 ## Summary
-Create simple admin-style pages for merchants and categories.
+Create forms embedded in or linked from project detail for adding project-specific inventory rows.
 
 ## Acceptance Criteria
-- User can list/create/edit/delete merchants.
-- User can list/create/edit/delete material categories.
-- User can list/create/edit/delete tool categories.
-- Navigation exposes these pages without clutter.
+- User can choose an existing material or tool from the catalog.
+- Forms capture quantity, price fields, merchant, purchase date, and notes.
+- Editing and removing project rows is supported.

@@ -153,6 +153,7 @@
             <th>Merchant</th>
             <th>Purchased</th>
             <th>Notes</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -180,6 +181,15 @@
             <td>{{ pm.merchant.name if pm.merchant else '—' }}</td>
             <td>{{ pm.purchased_on.strftime('%Y-%m-%d') if pm.purchased_on else '—' }}</td>
             <td>{{ pm.notes or '' }}</td>
+            <td>
+                {% if project.status != 'completed' %}
+                <a href="/projects/{{ project.id }}/materials/{{ pm.id }}/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+                <form method="POST" action="/projects/{{ project.id }}/materials/{{ pm.id }}/delete" class="d-inline"
+                      onsubmit="return confirm('Remove this material?')">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                </form>
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
     </tbody>
@@ -211,6 +221,7 @@
             <th>Merchant</th>
             <th>Purchased</th>
             <th>Notes</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -245,6 +256,15 @@
             <td>{{ pt.merchant.name if pt.merchant else '—' }}</td>
             <td>{{ pt.purchased_on.strftime('%Y-%m-%d') if pt.purchased_on else '—' }}</td>
             <td>{{ pt.notes or '' }}</td>
+            <td>
+                {% if project.status != 'completed' %}
+                <a href="/projects/{{ project.id }}/tools/{{ pt.id }}/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+                <form method="POST" action="/projects/{{ project.id }}/tools/{{ pt.id }}/delete" class="d-inline"
+                      onsubmit="return confirm('Remove this tool?')">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                </form>
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
     </tbody>

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}{{ action }} Tool — {{ project.name }}{% endblock %}
+{% block content %}
+<h1>{{ action }} Tool to "{{ project.name }}"</h1>
+
+{% if errors %}
+<div class="alert alert-danger">
+    <ul class="mb-0">{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+
+<form method="POST">
+    <div class="row">
+        <div class="col-md-6">
+            {% if action == 'Add' %}
+            <div class="mb-3">
+                <label for="tool_id" class="form-label">Tool <span class="text-danger">*</span></label>
+                <select class="form-select" id="tool_id" name="tool_id" required>
+                    <option value="">— Select Tool —</option>
+                    {% for t in tools %}
+                    <option value="{{ t.id }}" {% if form_data.get('tool_id')|string == t.id|string %}selected{% endif %}>
+                        {{ t.name }}{% if t.brand %} ({{ t.brand }}){% endif %}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% else %}
+            <p><strong>Tool:</strong> {{ pt.tool.name }}</p>
+            {% endif %}
+
+            <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity <span class="text-danger">*</span></label>
+                <input type="number" class="form-control" id="quantity" name="quantity"
+                       value="{{ form_data.get('quantity', 1) }}" min="1" required>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="already_owned" name="already_owned"
+                       {% if form_data.get('already_owned') %}checked{% endif %}>
+                <label class="form-check-label" for="already_owned">Already owned (no cost contribution)</label>
+            </div>
+
+            <div class="mb-3">
+                <label for="notes" class="form-label">Notes</label>
+                <textarea class="form-control" id="notes" name="notes" rows="2">{{ form_data.get('notes', '') }}</textarea>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="estimated_unit_price" class="form-label">Estimated Unit Price ($)</label>
+                <input type="number" class="form-control" id="estimated_unit_price" name="estimated_unit_price"
+                       value="{{ form_data.get('estimated_unit_price', '0') }}" min="0" step="0.01">
+            </div>
+
+            <div class="mb-3">
+                <label for="actual_unit_price" class="form-label">Actual Unit Price ($)</label>
+                <input type="number" class="form-control" id="actual_unit_price" name="actual_unit_price"
+                       value="{{ form_data.get('actual_unit_price', '') }}" min="0" step="0.01">
+            </div>
+
+            <div class="mb-3">
+                <label for="merchant_id" class="form-label">Merchant</label>
+                <select class="form-select" id="merchant_id" name="merchant_id">
+                    <option value="">— None —</option>
+                    {% for m in merchants %}
+                    <option value="{{ m.id }}" {% if form_data.get('merchant_id')|string == m.id|string %}selected{% endif %}>{{ m.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="purchased_on" class="form-label">Purchase Date</label>
+                <input type="date" class="form-control" id="purchased_on" name="purchased_on"
+                       value="{{ form_data.get('purchased_on', '') }}">
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">{% if action == 'Add' %}Add Tool{% else %}Save Changes{% endif %}</button>
+    <a href="/projects/{{ project.id }}" class="btn btn-outline-secondary ms-2">Cancel</a>
+</form>
+{% endblock %}
