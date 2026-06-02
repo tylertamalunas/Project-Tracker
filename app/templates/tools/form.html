@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}{{ action }} Tool — Project Tracker{% endblock %}
+
+{% block content %}
+<h1>{{ action }} Tool</h1>
+
+{% if errors %}
+<div class="alert alert-danger">
+    <strong>Please fix the following errors:</strong>
+    <ul class="mb-0 mt-1">
+        {% for error in errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<form method="POST">
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Name -->
+            <div class="mb-3">
+                <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="name" name="name"
+                       value="{{ tool.name or '' }}" required maxlength="200">
+            </div>
+
+            <!-- Brand -->
+            <div class="mb-3">
+                <label for="brand" class="form-label">Brand</label>
+                <input type="text" class="form-control" id="brand" name="brand"
+                       value="{{ tool.brand or '' }}" maxlength="200">
+            </div>
+
+            <!-- Model Number -->
+            <div class="mb-3">
+                <label for="model_number" class="form-label">Model Number</label>
+                <input type="text" class="form-control" id="model_number" name="model_number"
+                       value="{{ tool.model_number or '' }}" maxlength="100">
+            </div>
+
+            <!-- Notes -->
+            <div class="mb-3">
+                <label for="notes" class="form-label">Notes</label>
+                <textarea class="form-control" id="notes" name="notes"
+                          rows="3">{{ tool.notes or '' }}</textarea>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <!-- Default Price -->
+            <div class="mb-3">
+                <label for="default_price" class="form-label">Default Price ($)</label>
+                <input type="number" class="form-control" id="default_price" name="default_price"
+                       value="{{ tool.default_price or '0' }}" min="0" step="0.01">
+            </div>
+
+            <!-- Category -->
+            <div class="mb-3">
+                <label for="category_id" class="form-label">Category</label>
+                <select class="form-select" id="category_id" name="category_id">
+                    <option value="">— None —</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if tool.category_id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Merchant -->
+            <div class="mb-3">
+                <label for="merchant_id" class="form-label">Default Merchant</label>
+                <select class="form-select" id="merchant_id" name="merchant_id">
+                    <option value="">— None —</option>
+                    {% for m in merchants %}
+                    <option value="{{ m.id }}" {% if tool.merchant_id == m.id %}selected{% endif %}>{{ m.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            {% if action == 'Edit' %}
+            <!-- Active toggle -->
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="is_active" name="is_active"
+                       {% if tool.is_active is not defined or tool.is_active %}checked{% endif %}>
+                <label class="form-check-label" for="is_active">Active in catalog</label>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">
+            {% if action == 'Create' %}Create Tool{% else %}Save Changes{% endif %}
+        </button>
+        <a href="/tools" class="btn btn-outline-secondary ms-2">Cancel</a>
+    </div>
+</form>
+{% endblock %}

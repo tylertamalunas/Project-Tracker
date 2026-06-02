@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Tools — Project Tracker{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Tools</h1>
+    <a href="/tools/new" class="btn btn-primary">+ New Tool</a>
+</div>
+
+<!-- Filters -->
+<div class="mb-3 d-flex gap-2 flex-wrap">
+    <div>
+        <span class="me-1">Status:</span>
+        <a href="/tools" class="btn btn-sm {% if current_active_filter == 'all' %}btn-dark{% else %}btn-outline-secondary{% endif %}">All</a>
+        <a href="/tools?active=true" class="btn btn-sm {% if current_active_filter == 'true' %}btn-dark{% else %}btn-outline-secondary{% endif %}">Active</a>
+        <a href="/tools?active=false" class="btn btn-sm {% if current_active_filter == 'false' %}btn-dark{% else %}btn-outline-secondary{% endif %}">Inactive</a>
+    </div>
+    {% if categories %}
+    <div>
+        <span class="me-1">Category:</span>
+        <a href="/tools" class="btn btn-sm {% if not current_category_id %}btn-dark{% else %}btn-outline-secondary{% endif %}">All</a>
+        {% for cat in categories %}
+        <a href="/tools?category_id={{ cat.id }}" class="btn btn-sm {% if current_category_id == cat.id %}btn-dark{% else %}btn-outline-secondary{% endif %}">{{ cat.name }}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+{% if tools %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Merchant</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th class="text-end">Default Price</th>
+            <th>Active</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in tools %}
+        <tr>
+            <td>{{ t.name }}</td>
+            <td>{{ t.category.name if t.category else '—' }}</td>
+            <td>{{ t.merchant.name if t.merchant else '—' }}</td>
+            <td>{{ t.brand or '—' }}</td>
+            <td>{{ t.model_number or '—' }}</td>
+            <td class="text-end">${{ "%.2f"|format(t.default_price|float) }}</td>
+            <td>
+                {% if t.is_active %}
+                    <span class="badge bg-success">Active</span>
+                {% else %}
+                    <span class="badge bg-secondary">Inactive</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="/tools/{{ t.id }}/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="alert alert-info">
+    No tools found. <a href="/tools/new">Create one</a>.
+</div>
+{% endif %}
+{% endblock %}

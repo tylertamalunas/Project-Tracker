@@ -1,10 +1,10 @@
 # Current Task
-Build materials catalog pages and forms
+Build tools catalog pages and forms
 
 ## Summary
-Create list/detail/create/edit pages for materials.
+Create list/detail/create/edit pages for tools.
 
 ## Acceptance Criteria
-- User can browse and manage global materials.
+- User can browse and manage global tools.
 - List page supports basic filtering.
-- Forms support category, merchant, unit, default price, and notes.
+- Forms support category, merchant, default price, brand/model, and notes.
