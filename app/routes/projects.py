@@ -58,24 +58,24 @@ def project_detail(project_id):
 @projects_bp.route("/projects/new", methods=["GET", "POST"])
 def project_create():
     """Create a new project."""
+    from app.services.validators import validate_required, validate_price, validate_date, validate_choice
     errors = []
 
     if request.method == "POST":
-        name = request.form.get("name", "").strip()
+        name = request.form.get("name", "")
         description = request.form.get("description", "").strip()
         status = request.form.get("status", "planned")
-        start_date = request.form.get("start_date") or None
-        end_date = request.form.get("end_date") or None
-        budget_estimate = request.form.get("budget_estimate") or None
+        start_date_raw = request.form.get("start_date") or None
+        end_date_raw = request.form.get("end_date") or None
+        budget_raw = request.form.get("budget_estimate") or None
         notes = request.form.get("notes", "").strip()
 
-        # Convert budget to float if provided
-        if budget_estimate:
-            try:
-                budget_estimate = float(budget_estimate)
-            except ValueError:
-                errors.append("Budget estimate must be a number.")
-                budget_estimate = None
+        # Validate
+        name = validate_required(name, "Project name", errors)
+        status = validate_choice(status, "Status", ("planned", "active", "completed"), errors)
+        start_date = validate_date(start_date_raw, "Start date", errors)
+        end_date = validate_date(end_date_raw, "End date", errors)
+        budget_estimate = validate_price(budget_raw, "Budget estimate", errors)
 
         if not errors:
             try:
@@ -93,23 +93,21 @@ def project_create():
             except ValueError as e:
                 errors.append(str(e))
 
-        # Re-render form with errors and submitted values
         return render_template(
             "projects/form.html",
             action="Create",
             errors=errors,
             project={
-                "name": name,
+                "name": name or "",
                 "description": description,
-                "status": status,
-                "start_date": start_date,
-                "end_date": end_date,
-                "budget_estimate": budget_estimate,
+                "status": status or "planned",
+                "start_date": start_date_raw,
+                "end_date": end_date_raw,
+                "budget_estimate": budget_raw,
                 "notes": notes,
             },
         )
 
-    # GET — empty form
     return render_template(
         "projects/form.html",
         action="Create",
@@ -217,27 +215,23 @@ def project_material_add(project_id):
     merchants = Merchant.query.order_by(Merchant.name).all()
 
     if request.method == "POST":
+        from app.services.validators import validate_required, validate_positive_int, validate_price, validate_date
+
         material_id = request.form.get("material_id", type=int)
-        quantity = request.form.get("quantity", type=int) or 0
+        quantity_raw = request.form.get("quantity", "")
         unit_of_measure = request.form.get("unit_of_measure", "").strip()
-        estimated_unit_price = request.form.get("estimated_unit_price") or 0
-        actual_unit_price = request.form.get("actual_unit_price") or None
+        est_raw = request.form.get("estimated_unit_price", "")
+        act_raw = request.form.get("actual_unit_price", "")
         merchant_id = request.form.get("merchant_id", type=int) or None
-        purchased_on = request.form.get("purchased_on") or None
+        purchased_on_raw = request.form.get("purchased_on", "")
         notes = request.form.get("notes", "").strip()
 
-        try:
-            estimated_unit_price = float(estimated_unit_price)
-        except (ValueError, TypeError):
-            errors.append("Estimated price must be a number.")
-            estimated_unit_price = 0
-
-        if actual_unit_price:
-            try:
-                actual_unit_price = float(actual_unit_price)
-            except (ValueError, TypeError):
-                errors.append("Actual price must be a number.")
-                actual_unit_price = None
+        if not material_id:
+            errors.append("Please select a material.")
+        quantity = validate_positive_int(quantity_raw, "Quantity", errors)
+        estimated_unit_price = validate_price(est_raw, "Estimated unit price", errors, allow_none=False)
+        actual_unit_price = validate_price(act_raw, "Actual unit price", errors, allow_none=True)
+        purchased_on = validate_date(purchased_on_raw, "Purchase date", errors)
 
         if not errors:
             try:
