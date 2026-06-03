@@ -85,7 +85,9 @@
         <tr>
             <th>Name</th>
             <th>Status</th>
-            <th class="text-end">Actual Total</th>
+            <th class="text-end">Estimated</th>
+            <th class="text-end">Actual</th>
+            <th class="text-end">Variance</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -100,7 +102,18 @@
                     <span class="badge bg-secondary">Planned</span>
                 {% endif %}
             </td>
+            <td class="text-end">${{ "%.2f"|format(project.estimated_total) }}</td>
             <td class="text-end">${{ "%.2f"|format(project.actual_total) }}</td>
+            <td class="text-end">
+                {% set v = project.variance %}
+                {% if v > 0 %}
+                    <span class="text-danger">+${{ "%.2f"|format(v) }}</span>
+                {% elif v < 0 %}
+                    <span class="text-success">-${{ "%.2f"|format(v|abs) }}</span>
+                {% else %}
+                    $0.00
+                {% endif %}
+            </td>
             <td><a href="/projects/{{ project.id }}" class="btn btn-sm btn-outline-primary">View</a></td>
         </tr>
         {% endfor %}
@@ -110,5 +123,40 @@
 <div class="alert alert-info">
     No active or planned projects yet. <a href="/projects/new">Create one</a>.
 </div>
+{% endif %}
+
+<!-- Over Budget Alerts -->
+{% if over_budget_projects %}
+<h3 class="mt-4">⚠️ Over Budget</h3>
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>Project</th>
+            <th>Status</th>
+            <th class="text-end">Estimated</th>
+            <th class="text-end">Actual</th>
+            <th class="text-end">Over By</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for project in over_budget_projects %}
+        <tr class="table-danger">
+            <td>{{ project.name }}</td>
+            <td>
+                {% if project.status == 'completed' %}
+                    <span class="badge bg-success">Completed</span>
+                {% else %}
+                    <span class="badge bg-primary">Active</span>
+                {% endif %}
+            </td>
+            <td class="text-end">${{ "%.2f"|format(project.estimated_total) }}</td>
+            <td class="text-end">${{ "%.2f"|format(project.actual_total) }}</td>
+            <td class="text-end text-danger"><strong>+${{ "%.2f"|format(project.variance) }}</strong></td>
+            <td><a href="/projects/{{ project.id }}" class="btn btn-sm btn-outline-danger">Review</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endif %}
 {% endblock %}

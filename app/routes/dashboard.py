@@ -21,6 +21,13 @@ def dashboard():
         Project.status.in_(["active", "planned"])
     ).order_by(Project.updated_at.desc()).limit(5).all()
 
+    # Projects over budget (variance > 0)
+    all_active = Project.query.filter(
+        Project.status.in_(["active", "completed"])
+    ).all()
+    over_budget = [p for p in all_active if p.variance > 0]
+    over_budget.sort(key=lambda p: p.variance, reverse=True)
+
     return render_template(
         "dashboard.html",
         total_projects=total_projects,
@@ -30,4 +37,5 @@ def dashboard():
         tool_spend=spend["tool_spend"],
         total_spend=spend["total_spend"],
         recent_projects=recent,
+        over_budget_projects=over_budget[:5],
     )

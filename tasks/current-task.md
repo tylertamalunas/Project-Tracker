@@ -1,11 +1,10 @@
 # Current Task
-Add server-side validation for all create/edit forms
+Create dashboard/home page with high-value summaries
 
 ## Summary
-Ensure invalid data is rejected consistently across the app.
+Build a simple home page that makes the app feel useful immediately.
 
 ## Acceptance Criteria
-- Required fields are validated.
-- Numeric and date fields reject invalid formats.
-- Price and quantity rules are enforced.
-- Friendly validation errors are shown to the user.
+- Dashboard shows recent projects.
+- Dashboard shows all-time spend summaries.
+- Dashboard highlights projects over budget or recently updated, if feasible.
