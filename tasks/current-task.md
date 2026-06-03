@@ -1,10 +1,10 @@
 # Current Task
-Create dashboard/home page with high-value summaries
+Add basic filtering and sorting to project, material, and tool lists
 
 ## Summary
-Build a simple home page that makes the app feel useful immediately.
+Improve usability for growing datasets.
 
 ## Acceptance Criteria
-- Dashboard shows recent projects.
-- Dashboard shows all-time spend summaries.
-- Dashboard highlights projects over budget or recently updated, if feasible.
+- Projects can be filtered by status.
+- Materials and tools can be filtered by active state and optionally category.
+- Lists support at least one useful sort order.

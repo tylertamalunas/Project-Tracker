@@ -8,9 +8,12 @@ materials_bp = Blueprint("materials", __name__)
 
 @materials_bp.route("/materials")
 def material_list():
-    """List all materials with optional filters."""
+    """List all materials with optional filters and sorting."""
+    from app.models import Material
     active_filter = request.args.get("active")
     category_id = request.args.get("category_id", type=int)
+    sort_by = request.args.get("sort", "name")
+    sort_dir = request.args.get("dir", "asc")
 
     # Convert active filter
     active_only = None
@@ -19,7 +22,29 @@ def material_list():
     elif active_filter == "false":
         active_only = False
 
-    materials = material_service.list_materials(active_only=active_only, category_id=category_id)
+    # Build query
+    query = Material.query
+    if active_only is True:
+        query = query.filter_by(is_active=True)
+    elif active_only is False:
+        query = query.filter_by(is_active=False)
+    if category_id:
+        query = query.filter_by(category_id=category_id)
+
+    # Apply sort
+    sort_columns = {
+        "name": Material.name,
+        "default_price": Material.default_price,
+        "brand": Material.brand,
+        "created_at": Material.created_at,
+    }
+    sort_col = sort_columns.get(sort_by, Material.name)
+    if sort_dir == "desc":
+        query = query.order_by(sort_col.desc())
+    else:
+        query = query.order_by(sort_col.asc())
+
+    materials = query.all()
     categories = MaterialCategory.query.order_by(MaterialCategory.name).all()
 
     return render_template(
@@ -28,6 +53,8 @@ def material_list():
         categories=categories,
         current_active_filter=active_filter or "all",
         current_category_id=category_id,
+        current_sort=sort_by,
+        current_dir=sort_dir,
     )
 
 

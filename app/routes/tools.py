@@ -8,9 +8,12 @@ tools_bp = Blueprint("tools", __name__)
 
 @tools_bp.route("/tools")
 def tool_list():
-    """List all tools with optional filters."""
+    """List all tools with optional filters and sorting."""
+    from app.models import Tool
     active_filter = request.args.get("active")
     category_id = request.args.get("category_id", type=int)
+    sort_by = request.args.get("sort", "name")
+    sort_dir = request.args.get("dir", "asc")
 
     active_only = None
     if active_filter == "true":
@@ -18,7 +21,29 @@ def tool_list():
     elif active_filter == "false":
         active_only = False
 
-    tools = tool_service.list_tools(active_only=active_only, category_id=category_id)
+    # Build query
+    query = Tool.query
+    if active_only is True:
+        query = query.filter_by(is_active=True)
+    elif active_only is False:
+        query = query.filter_by(is_active=False)
+    if category_id:
+        query = query.filter_by(category_id=category_id)
+
+    # Apply sort
+    sort_columns = {
+        "name": Tool.name,
+        "default_price": Tool.default_price,
+        "brand": Tool.brand,
+        "created_at": Tool.created_at,
+    }
+    sort_col = sort_columns.get(sort_by, Tool.name)
+    if sort_dir == "desc":
+        query = query.order_by(sort_col.desc())
+    else:
+        query = query.order_by(sort_col.asc())
+
+    tools = query.all()
     categories = ToolCategory.query.order_by(ToolCategory.name).all()
 
     return render_template(
@@ -27,6 +52,8 @@ def tool_list():
         categories=categories,
         current_active_filter=active_filter or "all",
         current_category_id=category_id,
+        current_sort=sort_by,
+        current_dir=sort_dir,
     )
 
 

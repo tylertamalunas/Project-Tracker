@@ -28,6 +28,13 @@
 </div>
 
 {% if tools %}
+<!-- Sort controls -->
+<div class="mb-2">
+    <span class="me-1">Sort:</span>
+    <a href="/tools?sort=name&dir={% if current_sort == 'name' and current_dir == 'asc' %}desc{% else %}asc{% endif %}" class="btn btn-sm {% if current_sort == 'name' %}btn-dark{% else %}btn-outline-secondary{% endif %}">Name</a>
+    <a href="/tools?sort=default_price&dir={% if current_sort == 'default_price' and current_dir == 'asc' %}desc{% else %}asc{% endif %}" class="btn btn-sm {% if current_sort == 'default_price' %}btn-dark{% else %}btn-outline-secondary{% endif %}">Price</a>
+    <a href="/tools?sort=brand&dir={% if current_sort == 'brand' and current_dir == 'asc' %}desc{% else %}asc{% endif %}" class="btn btn-sm {% if current_sort == 'brand' %}btn-dark{% else %}btn-outline-secondary{% endif %}">Brand</a>
+</div>
 <table class="table table-striped">
     <thead>
         <tr>

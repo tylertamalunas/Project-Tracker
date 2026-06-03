@@ -7,18 +7,38 @@ projects_bp = Blueprint("projects", __name__)
 
 @projects_bp.route("/projects")
 def project_list():
-    """Show all projects in a table with optional status filter."""
+    """Show all projects with optional status filter and sorting."""
     status_filter = request.args.get("status", "all")
+    sort_by = request.args.get("sort", "updated_at")
+    sort_dir = request.args.get("dir", "desc")
 
+    # Build query
+    query = Project.query
     if status_filter in ("planned", "active", "completed"):
-        projects = Project.query.filter_by(status=status_filter).order_by(Project.created_at.desc()).all()
+        query = query.filter_by(status=status_filter)
+
+    # Apply sort
+    sort_columns = {
+        "name": Project.name,
+        "status": Project.status,
+        "start_date": Project.start_date,
+        "created_at": Project.created_at,
+        "updated_at": Project.updated_at,
+    }
+    sort_col = sort_columns.get(sort_by, Project.updated_at)
+    if sort_dir == "asc":
+        query = query.order_by(sort_col.asc())
     else:
-        projects = Project.query.order_by(Project.created_at.desc()).all()
+        query = query.order_by(sort_col.desc())
+
+    projects = query.all()
 
     return render_template(
         "projects/list.html",
         projects=projects,
         current_filter=status_filter,
+        current_sort=sort_by,
+        current_dir=sort_dir,
     )
 
 
