@@ -138,14 +138,9 @@ def project_create():
 
 @projects_bp.route("/projects/<int:project_id>/edit", methods=["GET", "POST"])
 def project_edit(project_id):
-    """Edit an existing project."""
+    """Edit an existing project. Completed projects can be edited to change status."""
     project = Project.query.get_or_404(project_id)
     errors = []
-
-    # Completed projects cannot be edited (domain rule)
-    if project.status == "completed":
-        flash("Completed projects are read-only. Change status to 'active' to edit.", "warning")
-        return redirect(url_for("projects.project_detail", project_id=project.id))
 
     if request.method == "POST":
         name = request.form.get("name", "").strip()
@@ -214,6 +209,17 @@ def project_edit(project_id):
         },
         project_id=project_id,
     )
+
+
+@projects_bp.route("/projects/<int:project_id>/delete", methods=["POST"])
+def project_delete(project_id):
+    """Delete a project regardless of status. Cascades to materials, tools, and media."""
+    try:
+        project_service.delete_project(project_id)
+        flash("Project deleted.", "success")
+    except ValueError as e:
+        flash(str(e), "danger")
+    return redirect(url_for("projects.project_list"))
 
 
 # ============================================================

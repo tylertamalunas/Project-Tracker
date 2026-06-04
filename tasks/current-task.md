@@ -1,11 +1,10 @@
 # Current Task
-Create fixture data set for manual QA scenarios
+Test project CRUD and status transitions
 
 ## Summary
-Build a known-good data set that covers the main workflows and edge cases.
+Verify project creation, editing, deletion, and status behavior.
 
 ## Acceptance Criteria
-- Includes projects in different statuses.
-- Includes owned and purchased tools.
-- Includes estimated-only and actual-priced materials.
-- Includes uploaded media examples or test stubs.
+- Manual or automated tests cover happy path and validation failures.
+- Dates and budget fields behave correctly.
+- Completed projects still render correctly in lists and detail views.
