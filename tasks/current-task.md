@@ -1,10 +1,11 @@
 # Current Task
-Add basic filtering and sorting to project, material, and tool lists
+Create fixture data set for manual QA scenarios
 
 ## Summary
-Improve usability for growing datasets.
+Build a known-good data set that covers the main workflows and edge cases.
 
 ## Acceptance Criteria
-- Projects can be filtered by status.
-- Materials and tools can be filtered by active state and optionally category.
-- Lists support at least one useful sort order.
+- Includes projects in different statuses.
+- Includes owned and purchased tools.
+- Includes estimated-only and actual-priced materials.
+- Includes uploaded media examples or test stubs.

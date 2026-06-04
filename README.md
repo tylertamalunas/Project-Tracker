@@ -58,6 +58,7 @@ SQLite database (`tracker.db`) is created automatically on first run. No manual 
 ```bash
 python seed.py          # Insert sample categories, merchants, materials, and tools
 python seed.py --reset  # Clear catalog data and re-seed from scratch
+python seed_qa.py       # Add QA fixture data (run after seed.py)
 ```
 
 ## Features (MVP)
