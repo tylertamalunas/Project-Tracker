@@ -205,3 +205,21 @@ def material_edit(material_id):
         merchants=merchants,
         material_id=material_id,
     )
+
+
+@materials_bp.route("/materials/<int:material_id>/delete", methods=["POST"])
+def material_delete(material_id):
+    """Delete a material from the catalog."""
+    from app.models import ProjectMaterial
+    # Check if material is used in any project
+    in_use = ProjectMaterial.query.filter_by(material_id=material_id).count()
+    if in_use > 0:
+        flash(f"Cannot delete: this material is used in {in_use} project(s). Remove it from projects first.", "danger")
+        return redirect(url_for("materials.material_list"))
+
+    try:
+        material_service.delete_material(material_id)
+        flash("Material deleted.", "success")
+    except ValueError as e:
+        flash(str(e), "danger")
+    return redirect(url_for("materials.material_list"))

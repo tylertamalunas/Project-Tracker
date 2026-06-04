@@ -198,3 +198,21 @@ def tool_edit(tool_id):
         merchants=merchants,
         tool_id=tool_id,
     )
+
+
+@tools_bp.route("/tools/<int:tool_id>/delete", methods=["POST"])
+def tool_delete(tool_id):
+    """Delete a tool from the catalog."""
+    from app.models import ProjectTool
+    # Check if tool is used in any project
+    in_use = ProjectTool.query.filter_by(tool_id=tool_id).count()
+    if in_use > 0:
+        flash(f"Cannot delete: this tool is used in {in_use} project(s). Remove it from projects first.", "danger")
+        return redirect(url_for("tools.tool_list"))
+
+    try:
+        tool_service.delete_tool(tool_id)
+        flash("Tool deleted.", "success")
+    except ValueError as e:
+        flash(str(e), "danger")
+    return redirect(url_for("tools.tool_list"))

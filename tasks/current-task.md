@@ -1,10 +1,10 @@
 # Current Task
-Test project CRUD and status transitions
+Test material and tool catalog workflows
 
 ## Summary
-Verify project creation, editing, deletion, and status behavior.
+Verify catalog CRUD operations and linkages to categories and merchants.
 
 ## Acceptance Criteria
-- Manual or automated tests cover happy path and validation failures.
-- Dates and budget fields behave correctly.
-- Completed projects still render correctly in lists and detail views.
+- Create/edit/delete works for materials and tools.
+- Category and merchant references save correctly.
+- Inactive items behave correctly in lists and project forms.

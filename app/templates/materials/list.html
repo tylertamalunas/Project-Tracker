@@ -66,6 +66,10 @@
             </td>
             <td>
                 <a href="/materials/{{ mat.id }}/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+                <form method="POST" action="/materials/{{ mat.id }}/delete" class="d-inline"
+                      onsubmit="return confirm('Delete this material?')">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
             </td>
         </tr>
         {% endfor %}
