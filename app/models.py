@@ -191,7 +191,7 @@ class MediaLink(db.Model):
     linked_entity_id = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
-    media = db.relationship("Media", backref="links")
+    media = db.relationship("Media", backref=db.backref("links", cascade="all, delete-orphan"))
 
 
 class ProjectHierarchy(db.Model):

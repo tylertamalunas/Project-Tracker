@@ -1,11 +1,11 @@
 # Current Task
-Test project-material and project-tool calculations
+Test media upload, retrieval, and deletion flows
 
 ## Summary
-Verify line-item math and total rollups.
+Verify the full lifecycle of local files and database metadata.
 
 ## Acceptance Criteria
-- Quantity * unit price math is correct.
-- Estimated and actual totals are computed correctly.
-- Already-owned tools do not inflate actual spend.
-- Variance values are correct for representative cases.
+- Allowed file types upload successfully.
+- Invalid types or oversize files are rejected.
+- Deleting media handles both metadata and file cleanup.
+- Media links to line items behave correctly.
