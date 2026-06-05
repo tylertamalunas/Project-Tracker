@@ -1,10 +1,11 @@
 # Current Task
-Test material and tool catalog workflows
+Test project-material and project-tool calculations
 
 ## Summary
-Verify catalog CRUD operations and linkages to categories and merchants.
+Verify line-item math and total rollups.
 
 ## Acceptance Criteria
-- Create/edit/delete works for materials and tools.
-- Category and merchant references save correctly.
-- Inactive items behave correctly in lists and project forms.
+- Quantity * unit price math is correct.
+- Estimated and actual totals are computed correctly.
+- Already-owned tools do not inflate actual spend.
+- Variance values are correct for representative cases.
