@@ -1,22 +1,10 @@
 # Current Task
-Run end-to-end manual walkthrough of primary user flow
+Write setup documentation for local development
 
 ## Summary
-Walk through the core scenario from project creation to completed summary.
+Document how to run the app from a clean checkout.
 
 ## Acceptance Criteria
-- Create a project.
-- Add materials and tools.
-- Upload receipts or photos.
-- Review totals over time.
-- Mark project complete.
-- Record issues found during the walkthrough.
-
-
-## Manually Completed Actions
-- Able to create a project. 
-- Able to add Materials and Tools to projects.
-- Able to upload attachments
-- Confirmed Totals change as materials and tools are added to projects. 
-- Able to mark projects complete, as well as move them back to active. 
-- No issues found
+- README covers Python version, virtualenv, dependencies, and run command.
+- README covers database initialization and seed steps.
+- README covers upload directory expectations.
