@@ -1,10 +1,13 @@
 # Current Task
-Write setup documentation for local development
+Add database reset and backup/export scripts
 
 ## Summary
-Document how to run the app from a clean checkout.
+Provide simple scripts for local lifecycle management of the SQLite database and uploaded files.
 
 ## Acceptance Criteria
-- README covers Python version, virtualenv, dependencies, and run command.
-- README covers database initialization and seed steps.
-- README covers upload directory expectations.
+- Script or documented commands exist for:
+  - initialize database
+  - reset database for dev
+  - back up database
+  - back up uploaded files
+- README documents when to use each action.

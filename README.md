@@ -52,6 +52,14 @@ Open your browser to **http://localhost:5000** — that's it.
 - **No account needed** — it's a single-user local app, no login required.
 - **To reset everything:** delete `tracker.db` and the `uploads/` folder, then run `python seed.py` if you want sample data again.
 
+### Backing Up Your Data
+
+```bash
+python scripts/backup.py
+```
+
+This creates a timestamped copy of your database and uploads in a `backups/` folder. Run it before updates or whenever you want a save point.
+
 ---
 
 ## For Developers
@@ -160,3 +168,17 @@ python -m pytest tests/ -v
 - **Computed totals** — project costs are calculated dynamically, never stored
 - **Polymorphic media links** — `media_links` table uses `entity_type` + `entity_id` to link files to any line item
 - **Soft deactivation** — materials/tools have `is_active` flag (inactive items hidden from project forms but preserved in history)
+
+### Database Lifecycle Scripts
+
+Located in `scripts/`:
+
+| Command | What It Does | When to Use |
+|---------|-------------|-------------|
+| `python scripts/db_init.py` | Creates tables (no data) | Fresh install, CI setup |
+| `python scripts/db_reset.py` | Deletes DB + uploads, re-seeds | Dev reset, starting over |
+| `python scripts/db_reset.py --qa` | Same + QA fixtures | Testing edge cases |
+| `python scripts/backup.py` | Copies DB + uploads to `backups/` | Before risky changes |
+| `python scripts/backup.py --dir /path` | Backup to custom location | Scheduled backups |
+
+**For end users:** the most important one is `backup.py` — run it periodically to save your project data.
