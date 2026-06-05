@@ -2,97 +2,124 @@
 
 A local web application for homeowners to track home improvement projects, materials, tools, costs, and receipts.
 
-## Tech Stack
+## Features
 
-- **Backend:** Python / Flask
-- **Frontend:** Jinja2 templates with Bootstrap 5
-- **Database:** SQLite (via SQLAlchemy)
-- **File Storage:** Local filesystem
+- Create and manage projects with status tracking (planned → active → completed)
+- Add materials and tools with estimated and actual costs
+- Compare budgets with variance highlighting (over/under budget)
+- Upload receipts and reference photos linked to specific purchases
+- Dashboard with global spend summaries and over-budget alerts
+- Organize with categories, merchants, project hierarchies, and related projects
+- Filter and sort all lists
 
-## Local Development Setup
+---
 
-### Prerequisites
+## For Users (Self-Hosting)
 
-- **Python 3.10+** (check with `python --version`)
-- **pip** (comes with Python)
-- **Git** (for cloning)
+Everything you need to run the app on your own computer.
 
-### 1. Clone the Repository
+### Requirements
+
+- Python 3.10 or newer ([download here](https://www.python.org/downloads/))
+
+### Setup (One Time)
 
 ```bash
+# 1. Download the project
 git clone https://github.com/tylertamalunas/Project-Tracker.git
 cd Project-Tracker
-```
 
-### 2. Create a Virtual Environment
-
-Using a virtual environment keeps dependencies isolated from your system Python.
-
-```bash
-# Create the virtual environment
-python -m venv .venv
-
-# Activate it
-# Windows (PowerShell):
-.venv\Scripts\Activate.ps1
-# Windows (CMD):
-.venv\Scripts\activate.bat
-# macOS/Linux:
-source .venv/bin/activate
-```
-
-You should see `(.venv)` in your terminal prompt when activated.
-
-### 3. Install Dependencies
-
-```bash
+# 2. Install dependencies
 pip install -r requirements.txt
+
+# 3. Load sample data (optional, gives you something to explore)
+python seed.py
 ```
 
-This installs Flask, Flask-SQLAlchemy, and SQLAlchemy.
-
-### 4. Initialize the Database
-
-The SQLite database (`tracker.db`) is created automatically on first run — no manual setup required. The app factory calls `db.create_all()` which creates all tables if they don't exist.
-
-To start with sample data:
-
-```bash
-python seed.py          # Load base catalog (categories, merchants, materials, tools, sample projects)
-python seed.py --reset  # Clear everything and re-seed from scratch
-python seed_qa.py       # (Optional) Add QA edge-case scenarios for testing
-```
-
-**Note:** If you see `OperationalError: no such column`, delete `tracker.db` and re-run. This happens when new columns are added to models without a migration tool (SQLAlchemy doesn't alter existing tables).
-
-### 5. Upload Directory
-
-Media files (receipts, photos, documents) are stored locally in the `uploads/` directory.
-
-- The directory is created automatically on app startup
-- Files are organized into project-specific subdirectories: `uploads/<project_id>/<filename>`
-- The `uploads/` directory is git-ignored (user content is not committed)
-- Max upload size: 16 MB (configurable in `config.py`)
-- Accepted file types: PNG, JPG, JPEG, GIF, PDF, DOC, DOCX, TXT
-
-### 6. Run the Application
+### Run the App
 
 ```bash
 python run.py
 ```
 
-The app starts at **http://localhost:5000** with debug mode enabled.
+Open your browser to **http://localhost:5000** — that's it.
 
-### Environment Variables (Optional)
+### What You Should Know
+
+- **Your data** is stored in `tracker.db` (SQLite file in the project folder). Back this up if you care about your data.
+- **Uploaded files** (receipts, photos) are saved in the `uploads/` folder.
+- **Accepted file types:** PNG, JPG, GIF, PDF, DOC, DOCX, TXT (max 16 MB each)
+- **No account needed** — it's a single-user local app, no login required.
+- **To reset everything:** delete `tracker.db` and the `uploads/` folder, then run `python seed.py` if you want sample data again.
+
+---
+
+## For Developers
+
+Technical details for contributing or modifying the app.
+
+### Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Backend | Python / Flask |
+| Frontend | Jinja2 templates, Bootstrap 5 |
+| Database | SQLite via SQLAlchemy |
+| File Storage | Local filesystem |
+
+### Dev Environment Setup
+
+```bash
+# Clone
+git clone https://github.com/tylertamalunas/Project-Tracker.git
+cd Project-Tracker
+
+# Create virtual environment
+python -m venv .venv
+
+# Activate it
+# Windows PowerShell:
+.venv\Scripts\Activate.ps1
+# Windows CMD:
+.venv\Scripts\activate.bat
+# macOS/Linux:
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Initialize with seed data
+python seed.py --reset
+python seed_qa.py        # Optional: adds edge-case test scenarios
+
+# Run
+python run.py
+```
+
+### Database
+
+- **Auto-created** on first run (`db.create_all()` in the app factory)
+- **No migrations tool** — if you add columns to models, delete `tracker.db` and re-seed
+- **Foreign keys enforced** via PRAGMA on every connection
+- **Schema reference:** see `schema.sql` for the full DDL
+
+### Upload Directory
+
+- Created automatically at startup
+- Structure: `uploads/<project_id>/<uuid>_<safe_filename>`
+- Git-ignored (user content not committed)
+- Configurable via `UPLOAD_FOLDER` environment variable
+
+### Environment Variables
 
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `DATABASE_URL` | `sqlite:///tracker.db` | Database connection string |
 | `UPLOAD_FOLDER` | `./uploads` | Local directory for file uploads |
-| `SECRET_KEY` | `dev-secret-key...` | Flask session secret (change for production) |
+| `SECRET_KEY` | `dev-secret-key...` | Flask session secret |
 | `FLASK_ENV` | `development` | `development` or `production` |
 
-## Project Structure
+### Project Structure
 
 ```
 Project-Tracker/
@@ -105,37 +132,31 @@ Project-Tracker/
 │   └── static/css/          # Custom stylesheets
 ├── tests/                   # All test files
 ├── uploads/                 # Media file storage (git-ignored)
-├── config.py                # App configuration (class-based)
+├── config.py                # Class-based configuration
 ├── run.py                   # Entry point
-├── seed.py                  # Base seed data script
-├── seed_qa.py              # QA fixture data script
-├── schema.sql              # Standalone DDL (reference)
+├── seed.py                  # Base seed data
+├── seed_qa.py              # QA fixture data
+├── schema.sql              # DDL reference
 ├── requirements.txt         # Python dependencies
-├── Instructions/            # Project specs and planning docs
+├── Instructions/            # Project specs and decisions
 ├── memory/                  # Task completion logs
 └── tasks/                   # Current task definition
 ```
 
-## Features (MVP)
-
-- Create, edit, and delete projects
-- Track project status (planned → active → completed → reopen)
-- Add materials and tools to projects with project-specific pricing
-- Compare estimated vs actual costs with variance tracking
-- Upload receipts and reference photos (linked to line items)
-- Dashboard with global spend summaries and over-budget alerts
-- Material and tool catalogs with categories and merchants
-- Project hierarchy (parent/child) and related-project links
-- Filtering and sorting on all list pages
-
-## Running Tests
-
-Tests are in the `tests/` directory and can be run individually:
+### Running Tests
 
 ```bash
+# Individual test file
 python tests/test_cost_service.py
-python tests/test_project_forms.py
-python tests/test_media_lifecycle.py
-# ... or run all:
-python -m pytest tests/ -v  # (if pytest installed)
+
+# All tests (if pytest installed)
+pip install pytest
+python -m pytest tests/ -v
 ```
+
+### Architecture Notes
+
+- **Service layer pattern** — business logic lives in `app/services/`, routes are thin controllers
+- **Computed totals** — project costs are calculated dynamically, never stored
+- **Polymorphic media links** — `media_links` table uses `entity_type` + `entity_id` to link files to any line item
+- **Soft deactivation** — materials/tools have `is_active` flag (inactive items hidden from project forms but preserved in history)
