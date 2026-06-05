@@ -1,10 +1,22 @@
 # Current Task
-Test project hierarchy and related-project edge cases
+Run end-to-end manual walkthrough of primary user flow
 
 ## Summary
-Verify that linking logic does not allow bad relationships.
+Walk through the core scenario from project creation to completed summary.
 
 ## Acceptance Criteria
-- Self-links are rejected.
-- Circular hierarchy cases are rejected or handled safely.
-- Related-project links render correctly on both sides if bidirectional display is intended.
+- Create a project.
+- Add materials and tools.
+- Upload receipts or photos.
+- Review totals over time.
+- Mark project complete.
+- Record issues found during the walkthrough.
+
+
+## Manually Completed Actions
+- Able to create a project. 
+- Able to add Materials and Tools to projects.
+- Able to upload attachments
+- Confirmed Totals change as materials and tools are added to projects. 
+- Able to mark projects complete, as well as move them back to active. 
+- No issues found
