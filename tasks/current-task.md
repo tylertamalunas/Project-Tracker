@@ -1,11 +1,10 @@
 # Current Task
-Test media upload, retrieval, and deletion flows
+Test project hierarchy and related-project edge cases
 
 ## Summary
-Verify the full lifecycle of local files and database metadata.
+Verify that linking logic does not allow bad relationships.
 
 ## Acceptance Criteria
-- Allowed file types upload successfully.
-- Invalid types or oversize files are rejected.
-- Deleting media handles both metadata and file cleanup.
-- Media links to line items behave correctly.
+- Self-links are rejected.
+- Circular hierarchy cases are rejected or handled safely.
+- Related-project links render correctly on both sides if bidirectional display is intended.
