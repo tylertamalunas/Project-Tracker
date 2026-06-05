@@ -1,13 +1,10 @@
 # Current Task
-Add database reset and backup/export scripts
+Package static assets and upload directories for local release use
 
 ## Summary
-Provide simple scripts for local lifecycle management of the SQLite database and uploaded files.
+Make local usage consistent outside the dev loop.
 
 ## Acceptance Criteria
-- Script or documented commands exist for:
-  - initialize database
-  - reset database for dev
-  - back up database
-  - back up uploaded files
-- README documents when to use each action.
+- App creates required directories when missing or documents them clearly.
+- Static assets load correctly in a non-debug run.
+- File path handling works with configurable base paths.
